@@ -24,7 +24,7 @@ const UserRouter = require('./routes/user');
 // use router
 app.use(UserRouter);
 
-var minutes = 0.5, the_interval = minutes * 60 * 1000;
+
 
 // setInterval(function() {
 //   console.log("Lucky Draw starting");

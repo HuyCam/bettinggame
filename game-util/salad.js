@@ -25,6 +25,17 @@ const getRandomInt = (max) => {
 }
 
 const saladGame = {
+    nextDrawTime: 0,
+    allowBet: false,
+    drawIntervalTime: 0,
+    restTime: 0,
+    last8Results: [],
+    initiateGame: function() {
+        this.restTime = 5 * 1000;
+        this.drawIntervalTime = 30 * 1000;
+        this.nextDrawTime = new Date().getTime + this.drawIntervalTime;
+        this.allowBet = true;
+    },
     pickFoodType : function() {
         let randomVal = getRandomInt(gameSetting.MAX_RANDOMIZED);
         let result = '';
