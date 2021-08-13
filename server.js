@@ -2,9 +2,9 @@
 require('dotenv').config();
 require('./db/mongoose');
 const express = require('express');
-const salad = require('./game-util/salad');
+const { saladGame } = require('./game-util/salad');
 const app = express();
-const port = process.env.PORT || 3000;
+const auth = require('./middlewares/auth');
 
 
 const cors = require('cors');
@@ -19,22 +19,31 @@ app.use(express.static(__dirname + '/static'));
 app.use(express.json());
 app.use(cors());
 
+saladGame.initiateGame();
+const timeInterval = 35 * 1000;
+setInterval(function() {
+    console.log("Lucky Draw starting");
+    let result = saladGame.draw();
+    console.log("result " + result);
+  }, timeInterval);
+
 // import routers
 const UserRouter = require('./routes/user');
 // use router
 app.use(UserRouter);
 
-
-
-// setInterval(function() {
-//   console.log("Lucky Draw starting");
-//   let result = salad.saladGame.draw();
-//   console.log("result " + result);
-// }, the_interval);
-
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/index.html');
 });
+
+app.post('/bet', auth, async (req, res) => {
+  const user = await req.user.toJSON();
+  if (saladGame.allowBet) {
+    res.send('you can bet');
+  } else {
+    res.send('you can not bet');
+  }
+})
 
 io.on('connection', (socket) => {
 
@@ -45,6 +54,7 @@ io.on('connection', (socket) => {
     console.log('client disconnected from server');
   })
 })
+
 
 
 module.exports = server;

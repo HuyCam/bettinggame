@@ -5,8 +5,9 @@ const auth = require('../middlewares/auth');
 // import models
 const User = require('../models/user');
 
-router.post('/users/bet', auth, async (req, res) => {
+router.post('/users/me', auth, async (req, res) => {
     const user = await req.user.toJSON();
+
     res.send({ user: user });
 })
 

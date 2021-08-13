@@ -27,12 +27,12 @@ const getRandomInt = (max) => {
 const saladGame = {
     nextDrawTime: 0,
     allowBet: false,
-    drawIntervalTime: 0,
-    restTime: 0,
+    drawTimer: 0,
+    restTimer: 0,
     last8Results: [],
     initiateGame: function() {
-        this.restTime = 5 * 1000;
-        this.drawIntervalTime = 30 * 1000;
+        this.restTimer = 5 * 1000;
+        this.drawTimer = 30 * 1000;
         this.nextDrawTime = new Date().getTime + this.drawIntervalTime;
         this.allowBet = true;
     },
@@ -81,6 +81,9 @@ const saladGame = {
         return result;
     },
     draw: function() {
+        console.log('Stop betting, waiting for');
+        const that = this;
+        this.allowBet = false;
         let foodType,food;
         // pick food type
         foodType = this.pickFoodType();
@@ -90,9 +93,15 @@ const saladGame = {
         } else {
             food = this.pickVegetableType();
         }
-        // return resul
+
+        setTimeout(function() {
+            console.log('You can start betting');
+            that.allowBet = true;
+        }, that.restTimer);
+        // return result
         return food;
-    }
+    },
+
     
 }
 
