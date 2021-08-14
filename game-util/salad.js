@@ -1,4 +1,4 @@
-const FOOD_TYPE = {
+const BET_ITEM_TYPE = {
     MEAT: {
         TYPE: 'MEAT',
         HOT_DOG: 'HOT_DOG',
@@ -16,9 +16,19 @@ const FOOD_TYPE = {
 };
 
 const gameSetting = {
-    MAX_RANDOMIZED: 100
+    MAX_RANDOMIZED: 1000,
+    FOOD_WIN_TIMES: {
+        HOT_DOG: 10,
+        MEAT_SKEWER: 15,
+        CHICKEN_THIGH: 25,
+        BEEF: 45,
+        TOMATO: 5,
+        CABBAGE: 5,
+        CORN: 5,
+        CARROT: 5
+    },
+    MAX_FOOD_BET: 2
 }
-
 
 const getRandomInt = (max) => {
     return Math.floor(Math.random() * max);
@@ -29,7 +39,8 @@ const saladGame = {
     allowBet: false,
     drawTimer: 0,
     restTimer: 0,
-    last8Results: [],
+    last8Results: new Array(),
+    lastResult:"",
     initiateGame: function() {
         this.restTimer = 5 * 1000;
         this.drawTimer = 30 * 1000;
@@ -39,45 +50,25 @@ const saladGame = {
     pickFoodType : function() {
         let randomVal = getRandomInt(gameSetting.MAX_RANDOMIZED);
         let result = '';
-        if (randomVal <= 80) {
-            result = FOOD_TYPE.VEGETABLE.TYPE;
-            return result;
+
+        if (randomVal <= 175) {
+            result = BET_ITEM_TYPE.VEGETABLE.TOMATO;
+        } else if (randomVal > 175 && randomVal <= 350) {
+            result = BET_ITEM_TYPE.VEGETABLE.CABBAGE;
+        } else if (randomVal > 350 && randomVal <= 525) {
+            result = BET_ITEM_TYPE.VEGETABLE.CORN;
+        } else if (randomVal > 525 && randomVal <= 700) {
+            result = BET_ITEM_TYPE.VEGETABLE.CARROT;
+        } else if (randomVal > 700 && randomVal <= 790) {
+            result  = BET_ITEM_TYPE.MEAT.HOT_DOG;
+        } else if (randomVal > 790 && randomVal <= 860) {
+            result = BET_ITEM_TYPE.MEAT.MEAT_SKEWER;
+        } else if (randomVal > 860 && randomVal <= 930) {
+            result = BET_ITEM_TYPE.MEAT.CHICKEN_THIGH;
         } else {
-            result = FOOD_TYPE.MEAT.TYPE;
-            return result;
+            result = BET_ITEM_TYPE.MEAT.BEEF;
         }
-        
-    },
-    pickMeatType: function() {
-        let randomVal = getRandomInt(gameSetting.MAX_RANDOMIZED);
-        let result = '';
-    
-        if (randomVal <= 75 && randomVal <= 50) {
-            result = FOOD_TYPE.MEAT.HOT_DOG;
-        } else if (randomVal <= 75 && randomVal > 50) {
-            result = FOOD_TYPE.MEAT.MEAT_SKEWER;
-        } else if (randomVal > 75 && randomVal <= 90) {
-            result = FOOD_TYPE.MEAT.CHICKEN_THIGH;
-        } else {
-            result = FOOD_TYPE.MEAT.BEEF;
-        }
-    
-        return result;
-    },
-    pickVegetableType: function() {
-        let randomVal = getRandomInt(gameSetting.MAX_RANDOMIZED);
-        let result = '';
-    
-        if (randomVal >= 0 && randomVal <= 24  ) {
-            result = FOOD_TYPE.VEGETABLE.TOMATO;
-        } else if (randomVal > 24 && randomVal <= 49) {
-            result = FOOD_TYPE.VEGETABLE.CABBAGE;
-        } else if (randomVal > 49 && randomVal <= 74) {
-            result = FOOD_TYPE.VEGETABLE.CORN;
-        } else {
-            result = FOOD_TYPE.VEGETABLE.CARROT;
-        }
-    
+
         return result;
     },
     draw: function() {
@@ -86,25 +77,28 @@ const saladGame = {
         this.allowBet = false;
         let foodType,food;
         // pick food type
-        foodType = this.pickFoodType();
-        // pick meat/vegetable type
-        if (foodType === FOOD_TYPE.MEAT.TYPE) {
-            food = this.pickMeatType();
-        } else {
-            food = this.pickVegetableType();
-        }
+        food = this.pickFoodType();
 
         setTimeout(function() {
             console.log('You can start betting');
             that.allowBet = true;
         }, that.restTimer);
+
+        // save result
+        this.lastResult = food;
+        if (this.last8Results.length === 8) {
+            this.last8Results.pop();
+            this.last8Results.unshift(food);
+        } else if (this.last8Results.length < 8) {
+            this.last8Results.unshift(food);
+        }
         // return result
         return food;
-    },
-
-    
+    }
 }
 
 
 
 exports.saladGame = saladGame;
+exports.FOOD_TYPE = BET_ITEM_TYPE;
+exports.gameSetting = gameSetting;
