@@ -6,13 +6,13 @@ const betManager = {
     bettingqueue: [],
     processBetResult: function(result) {
         // process bets
-        this.bettingqueue.forEach(async (e) => {
+        this.bettingqueue.forEach(async (betInfo) => {
 
-            const winningBet = _.findWhere(e.bet, {food: result});
+            const winningBet = _.findWhere(betInfo.bets, {item: result});
 
             if (winningBet) {
-                const user = await User.findById(e._id);
-                user.money += e.value * gameSetting.FOOD_WIN_TIMES[result];
+                const user = await User.findById(betInfo._id);
+                user.money += betInfo.value * gameSetting.ITEM_WIN_TIMES[result];
             }
         });
 
@@ -24,7 +24,7 @@ const betManager = {
         
         if (userBet) {
             // add that to userBet
-            let bet = _.findWhere(userBet.bets, { food: newBet.bet.food});
+            let bet = _.findWhere(userBet.bets, { item: newBet.bet.item});
 
             if (bet) {
                 bet.value += newBet.bet.value;

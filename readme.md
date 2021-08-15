@@ -25,3 +25,16 @@ PORT=8080
 
 in production:
 MONGODB_URI=mongodb+srv://<USERID>:<password>@bettinggamedb.tdq5m.mongodb.net/<DB>?retryWrites=true&w=majority
+
+
+socketio
+use
+io.sockets.emit('update') to send emit event to all connected client.
+
+
+issue found
+jest test have issue with EADDRINUSE: address already in use
+solution: https://stackoverflow.com/questions/60804299/how-to-solve-listen-eaddrinuse-address-already-in-use-in-integration-tests
+Supertest is able to manage the setup/teardown of an express/koa app itself if you can import an instance of app without calling .listen() on it.
+
+which mean we don't import the app that call the .listen method. just call the server instance.

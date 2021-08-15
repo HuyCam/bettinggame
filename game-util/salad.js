@@ -1,33 +1,33 @@
 const BET_ITEM_TYPE = {
-    MEAT: {
-        TYPE: 'MEAT',
-        HOT_DOG: 'HOT_DOG',
-        MEAT_SKEWER: 'MEAT_SKEWER',
-        CHICKEN_THIGH: 'CHICKEN_THIGH',
-        BEEF: 'BEEF'
+    HIGH_YIELD_ITEM: {
+        TYPE: 'CARNIVORES',
+        FOX: 'FOX',
+        PYTHON: 'PYTHON',
+        LION: 'LION',
+        T_REX: 'T_REX'
     },
-    VEGETABLE: {
-        TYPE: 'VEGETABLE',
-        TOMATO: 'TOMATO',
-        CABBAGE: 'CABBAGE',
-        CORN: 'CORN',
-        CARROT: 'CARROT'
+    LOW_YIELD_ITEM: {
+        TYPE: 'HERBIVORES',
+        HORSE: 'HORSE',
+        PANDA: 'PANDA',
+        ELEPHANT: 'ELEPHANT',
+        COW: 'COW'
     }
 };
 
 const gameSetting = {
     MAX_RANDOMIZED: 1000,
-    FOOD_WIN_TIMES: {
-        HOT_DOG: 10,
-        MEAT_SKEWER: 15,
-        CHICKEN_THIGH: 25,
-        BEEF: 45,
-        TOMATO: 5,
-        CABBAGE: 5,
-        CORN: 5,
-        CARROT: 5
+    ITEM_WIN_TIMES: {
+        FOX: 10,
+        PYTHON: 15,
+        LION: 25,
+        T_REX: 45,
+        HORSE: 5,
+        PANDA: 5,
+        ELEPHANT: 5,
+        COW: 5
     },
-    MAX_FOOD_BET: 2
+    MAX_ITEM_BET: 6
 }
 
 const getRandomInt = (max) => {
@@ -47,26 +47,26 @@ const saladGame = {
         this.nextDrawTime = new Date().getTime + this.drawIntervalTime;
         this.allowBet = true;
     },
-    pickFoodType : function() {
+    pickItemType : function() {
         let randomVal = getRandomInt(gameSetting.MAX_RANDOMIZED);
         let result = '';
 
         if (randomVal <= 175) {
-            result = BET_ITEM_TYPE.VEGETABLE.TOMATO;
+            result = BET_ITEM_TYPE.LOW_YIELD_ITEM.HORSE;
         } else if (randomVal > 175 && randomVal <= 350) {
-            result = BET_ITEM_TYPE.VEGETABLE.CABBAGE;
+            result = BET_ITEM_TYPE.LOW_YIELD_ITEM.PANDA;
         } else if (randomVal > 350 && randomVal <= 525) {
-            result = BET_ITEM_TYPE.VEGETABLE.CORN;
+            result = BET_ITEM_TYPE.LOW_YIELD_ITEM.ELEPHANT;
         } else if (randomVal > 525 && randomVal <= 700) {
-            result = BET_ITEM_TYPE.VEGETABLE.CARROT;
+            result = BET_ITEM_TYPE.LOW_YIELD_ITEM.COW;
         } else if (randomVal > 700 && randomVal <= 790) {
-            result  = BET_ITEM_TYPE.MEAT.HOT_DOG;
+            result  = BET_ITEM_TYPE.HIGH_YIELD_ITEM.FOX;
         } else if (randomVal > 790 && randomVal <= 860) {
-            result = BET_ITEM_TYPE.MEAT.MEAT_SKEWER;
+            result = BET_ITEM_TYPE.HIGH_YIELD_ITEM.PYTHON;
         } else if (randomVal > 860 && randomVal <= 930) {
-            result = BET_ITEM_TYPE.MEAT.CHICKEN_THIGH;
+            result = BET_ITEM_TYPE.HIGH_YIELD_ITEM.LION;
         } else {
-            result = BET_ITEM_TYPE.MEAT.BEEF;
+            result = BET_ITEM_TYPE.HIGH_YIELD_ITEM.T_REX;
         }
 
         return result;
@@ -75,9 +75,9 @@ const saladGame = {
         console.log('Stop betting, waiting for');
         const that = this;
         this.allowBet = false;
-        let foodType,food;
+        let item;
         // pick food type
-        food = this.pickFoodType();
+        item = this.pickItemType();
 
         setTimeout(function() {
             console.log('You can start betting');
@@ -85,15 +85,18 @@ const saladGame = {
         }, that.restTimer);
 
         // save result
-        this.lastResult = food;
+        this.saveResult(item);
+        // return result
+        return item;
+    },
+    saveResult: function(item) {
+        this.lastResult = item;
         if (this.last8Results.length === 8) {
             this.last8Results.pop();
-            this.last8Results.unshift(food);
+            this.last8Results.unshift(item);
         } else if (this.last8Results.length < 8) {
-            this.last8Results.unshift(food);
+            this.last8Results.unshift(item);
         }
-        // return result
-        return food;
     }
 }
 

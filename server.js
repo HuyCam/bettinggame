@@ -1,6 +1,5 @@
 
 require('dotenv').config({ path: `./config/${process.env.NODE_ENV}.env`});
-console.log(`configgggg ./.env.${process.env.NODE_ENV}`);
 require('./db/mongoose');
 const express = require('express');
 const { saladGame } = require('./game-util/salad');
@@ -28,9 +27,14 @@ Salad Game Draw interval set up
 */
 if (process.env.NODE_ENV !== 'test') {
   setInterval(function() {
-    console.log("Lucky Draw starting");
+    console.log("Lucky Draw starting-------------------------------");
     let result = saladGame.draw();
     console.log("result " + result);
+    //TODO: Add logic to process all bets and clear betting clear
+    // process winners and clear bettingqueue
+
+    // emit update to client
+    io.sockets.emit('update')
     console.log('Last 8 result ' + saladGame.last8Results.toString());
   }, timeInterval);
 }
@@ -48,8 +52,11 @@ app.get('/', (req, res) => {
 app.post('/bet', auth, async (req, res) => {
   try {
     if (saladGame.allowBet) {
+      //TODO: add money check logic
+      //check if a user has enough money to bet
+      
+
       betManager.addBet(req.body);
-      console.log(JSON.stringify(betManager.bettingqueue));
       res.send('you can bet');
     } else {
       res.status(400).send({ bet: req.body.bet });

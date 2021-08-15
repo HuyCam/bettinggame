@@ -1,5 +1,6 @@
 const express = require('express');
 const router = new express.Router();
+
 const auth = require('../middlewares/auth');
 
 // import models
@@ -28,12 +29,12 @@ router.post('/users', async (req, res) => {
 
 router.post('/users/login', async (req, res) => {
     try {
-        const user = await User.findByCredentials(req.body.email);
+        const user = await User.findByCredentials(req.body.email, req.body.password);
         const token = await user.generateToken();
         
         const aUser = await user.toJSON();
 
-        res.status(201).send({user: aUser, token});
+        res.status(200).send({user: aUser, token});
     } catch(e) {
         res.status(400).send(e);
     }
