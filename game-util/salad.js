@@ -103,5 +103,5 @@ const saladGame = {
 
 
 exports.saladGame = saladGame;
-exports.FOOD_TYPE = BET_ITEM_TYPE;
+exports.BET_ITEM_TYPE = BET_ITEM_TYPE;
 exports.gameSetting = gameSetting;

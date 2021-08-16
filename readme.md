@@ -36,5 +36,4 @@ issue found
 jest test have issue with EADDRINUSE: address already in use
 solution: https://stackoverflow.com/questions/60804299/how-to-solve-listen-eaddrinuse-address-already-in-use-in-integration-tests
 Supertest is able to manage the setup/teardown of an express/koa app itself if you can import an instance of app without calling .listen() on it.
-
 which mean we don't import the app that call the .listen method. just call the server instance.

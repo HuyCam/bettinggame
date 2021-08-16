@@ -2,22 +2,32 @@ const User = require('../models/user');
 const _ = require('underscore');
 const { gameSetting } = require('./salad');
 
+/*
+bettingqueu: [ {
+    _id: userID,
+    bets:[{item, value}]
+}]
+*/
 const betManager = {
     bettingqueue: [],
-    processBetResult: function(result) {
+    processBetResult: async function(result) {
         // process bets
-        this.bettingqueue.forEach(async (betInfo) => {
+        for (let i = 0; i < this.bettingqueue.length; i++) {
+            let betInfo = this.bettingqueue[i];
 
             const winningBet = _.findWhere(betInfo.bets, {item: result});
-
+            const user = await User.findById(betInfo._id);
             if (winningBet) {
-                const user = await User.findById(betInfo._id);
-                user.money += betInfo.value * gameSetting.ITEM_WIN_TIMES[result];
+                user.money += parseInt(winningBet.value) * gameSetting.ITEM_WIN_TIMES[result];   
             }
-        });
+
+            await user.save();
+        }
+        
 
         // clear bet
-        this.clearBet();
+        // this.clearBet();
+        return;
     },
     addBet: function(newBet) {
         let userBet = _.findWhere(this.bettingqueue, { _id: newBet._id });
@@ -47,12 +57,6 @@ const betManager = {
         this.bettingqueue.splice(0, this.bettingqueue.length);
     }
 }
-/*
-betting {
-    _id: user IDBCursor,
-    bets:[{food, value}]
 
-}
-*/
 
 exports.betManager = betManager;

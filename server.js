@@ -31,8 +31,11 @@ if (process.env.NODE_ENV !== 'test') {
     let result = saladGame.draw();
     console.log("result " + result);
     //TODO: Add logic to process all bets and clear betting clear
-    // process winners and clear bettingqueue
+    // process winners 
 
+
+    // Clear Betting Queue
+    betManager.clearBet();
     // emit update to client
     io.sockets.emit('update')
     console.log('Last 8 result ' + saladGame.last8Results.toString());
@@ -54,7 +57,7 @@ app.post('/bet', auth, async (req, res) => {
     if (saladGame.allowBet) {
       //TODO: add money check logic
       //check if a user has enough money to bet
-      
+
 
       betManager.addBet(req.body);
       res.send('you can bet');
