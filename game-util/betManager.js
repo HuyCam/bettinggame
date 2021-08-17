@@ -32,32 +32,7 @@ const betManager = {
         return;
     },
     addBet: function(newBet) {
-        let userBet = _.findWhere(this.bettingqueue, { _id: newBet._id });
-        
-        if (userBet) {
-            // add that to userBet
-            let bet = _.findWhere(userBet.bets, { item: newBet.bet.item});
-
-            if (bet) {
-                bet.value += newBet.bet.value;
-                return;
-            } else if (userBet.bets.length < gameSetting.MAX_ITEM_BET) {
-                lock.acquire('key1', function(done) {
-                    userBet.bets.push(newBet.bet);
-                    done();
-                }, function(err, ret) {
-
-                })
-                
-            } else {
-                throw new Error(`You can not bet more than ${gameSetting.MAX_ITEM_BET} items`);
-            }
-        } else {
-            this.bettingqueue.push({
-                _id: newBet._id,
-                bets: [newBet.bet]
-            });
-        }
+       
 
         
     },

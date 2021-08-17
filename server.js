@@ -68,18 +68,14 @@ app.get('/game', (req, res) => {
 app.post('/bet', auth, async (req, res) => {
   try {
     if (saladGame.allowBet) {
+      // TODO: redo all the adding bet logic
       //check if a user has enough money to bet and deduct money from user
-      req.user.money -= req.body.bet.value;
-      if (req.user.money < 0) {
-        res.status(400).send({error: 'Insufficient fund'});
-      } else {
-        await req.user.save();
-      }
+     
+      // check if user bets has only 6 items
 
-      betManager.addBet(req.body);
-      res.send(req.body.bet);
+      // check if user has enough fund to bet
     } else {
-      res.status(400).send('some error occured');
+      res.status(400).send({error: 'You can not bet now'});
     }
   } catch(e) {
     res.status(400).send(e.message);
