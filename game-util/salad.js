@@ -1,17 +1,17 @@
 const BET_ITEM_TYPE = {
     HIGH_YIELD_ITEM: {
-        TYPE: 'CARNIVORES',
+        TYPE: 'PINK',
         FOX: 'FOX',
-        PYTHON: 'PYTHON',
+        SNAKE: 'SNAKE',
         LION: 'LION',
         T_REX: 'T_REX'
     },
     LOW_YIELD_ITEM: {
-        TYPE: 'HERBIVORES',
-        HORSE: 'HORSE',
-        PANDA: 'PANDA',
+        TYPE: 'BLUE',
+        BULL: 'BULL',
+        DOG: 'DOG',
         ELEPHANT: 'ELEPHANT',
-        COW: 'COW'
+        ORCA: 'ORCA'
     }
 };
 
@@ -19,13 +19,13 @@ const gameSetting = {
     MAX_RANDOMIZED: 1000,
     ITEM_WIN_TIMES: {
         FOX: 10,
-        PYTHON: 15,
+        SNAKE: 15,
         LION: 25,
         T_REX: 45,
-        HORSE: 5,
-        PANDA: 5,
+        BULL: 5,
+        DOG: 5,
         ELEPHANT: 5,
-        COW: 5
+        ORCA: 5
     },
     MAX_ITEM_BET: 6
 }
@@ -51,19 +51,19 @@ const saladGame = {
         let randomVal = getRandomInt(gameSetting.MAX_RANDOMIZED);
         let result = '';
 
-        if (randomVal <= 175) {
-            result = BET_ITEM_TYPE.LOW_YIELD_ITEM.HORSE;
-        } else if (randomVal > 175 && randomVal <= 350) {
-            result = BET_ITEM_TYPE.LOW_YIELD_ITEM.PANDA;
-        } else if (randomVal > 350 && randomVal <= 525) {
+        if (randomVal <= 199) {
+            result = BET_ITEM_TYPE.LOW_YIELD_ITEM.BULL;
+        } else if (randomVal > 199 && randomVal <= 399) {
+            result = BET_ITEM_TYPE.LOW_YIELD_ITEM.DOG;
+        } else if (randomVal > 399 && randomVal <= 599) {
             result = BET_ITEM_TYPE.LOW_YIELD_ITEM.ELEPHANT;
-        } else if (randomVal > 525 && randomVal <= 700) {
-            result = BET_ITEM_TYPE.LOW_YIELD_ITEM.COW;
-        } else if (randomVal > 700 && randomVal <= 790) {
+        } else if (randomVal > 599 && randomVal <= 799) {
+            result = BET_ITEM_TYPE.LOW_YIELD_ITEM.ORCA;
+        } else if (randomVal > 799 && randomVal <= 880) {
             result  = BET_ITEM_TYPE.HIGH_YIELD_ITEM.FOX;
-        } else if (randomVal > 790 && randomVal <= 860) {
-            result = BET_ITEM_TYPE.HIGH_YIELD_ITEM.PYTHON;
-        } else if (randomVal > 860 && randomVal <= 930) {
+        } else if (randomVal > 880 && randomVal <= 930) {
+            result = BET_ITEM_TYPE.HIGH_YIELD_ITEM.SNAKE;
+        } else if (randomVal > 930 && randomVal <= 970) {
             result = BET_ITEM_TYPE.HIGH_YIELD_ITEM.LION;
         } else {
             result = BET_ITEM_TYPE.HIGH_YIELD_ITEM.T_REX;

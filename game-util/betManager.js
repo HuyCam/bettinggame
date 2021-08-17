@@ -1,6 +1,8 @@
 const User = require('../models/user');
 const _ = require('underscore');
 const { gameSetting } = require('./salad');
+const AsyncLock = require('async-lock');
+const lock = new AsyncLock();
 
 /*
 bettingqueu: [ {
@@ -26,7 +28,7 @@ const betManager = {
         
 
         // clear bet
-        // this.clearBet();
+        this.clearBet();
         return;
     },
     addBet: function(newBet) {
@@ -40,9 +42,15 @@ const betManager = {
                 bet.value += newBet.bet.value;
                 return;
             } else if (userBet.bets.length < gameSetting.MAX_ITEM_BET) {
-                userBet.bets.push(newBet.bet);
+                lock.acquire('key1', function(done) {
+                    userBet.bets.push(newBet.bet);
+                    done();
+                }, function(err, ret) {
+
+                })
+                
             } else {
-                throw new Error(`You can not bet more than ${gameSetting.MAX_ITEM_BET} foods`);
+                throw new Error(`You can not bet more than ${gameSetting.MAX_ITEM_BET} items`);
             }
         } else {
             this.bettingqueue.push({

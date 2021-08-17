@@ -34,7 +34,7 @@ const userSchema = mongoose.Schema({
     },
     money: {
         type: Number,
-        default: 0
+        default: 6000
     },
     tokens: [{
         token: {

@@ -2,7 +2,7 @@ let app = require('../server');
 let User = require('../models/user');
 const {userOne, userOneId, setupDatabase } = require('./fixtures/db');
 const request = require('supertest');
-const { saladGame } = require('../game-util/salad');
+const { saladGame, BET_ITEM_TYPE } = require('../game-util/salad');
 const { betManager } = require('../game-util/betManager');
 
 beforeEach(setupDatabase)
@@ -52,26 +52,27 @@ test('Should be able to login', async() => {
         password: '56what!!'
     }).expect(200)
 
-
+    expect(response.body.user.name).toBe('Mike');
+    expect(response.body.user.email).toBe('mike@example.com');
 })
 
 test('Should add bets', async () => {
     const bets = [{
         _id: userOne._id,
         bet: {
-            item: "COW",
+            item: BET_ITEM_TYPE.LOW_YIELD_ITEM.BULL,
             value: 300
         }
     }, {
         _id: userOne._id,
         bet: {
-            item: "PANDA",
+            item: BET_ITEM_TYPE.LOW_YIELD_ITEM.DOG,
             value: 300
         }
     }, {
         _id: userOne._id,
         bet: {
-            item: "FOX",
+            item: BET_ITEM_TYPE.HIGH_YIELD_ITEM.FOX,
             value: 450
         }
     }];
@@ -81,7 +82,7 @@ test('Should add bets', async () => {
 
     expect(betManager.bettingqueue[0].bets).toEqual(expect.arrayContaining(
         [{
-            item: "COW",
+            item: BET_ITEM_TYPE.LOW_YIELD_ITEM.BULL,
             value: 300
         }]));
 
@@ -90,7 +91,7 @@ test('Should add bets', async () => {
 
     expect(betManager.bettingqueue[0].bets).toEqual(expect.arrayContaining(
         [{
-            item: "COW",
+            item: BET_ITEM_TYPE.LOW_YIELD_ITEM.BULL,
             value: 600
         }]));
 
@@ -99,7 +100,7 @@ test('Should add bets', async () => {
 
     expect(betManager.bettingqueue[0].bets).toEqual(expect.arrayContaining(
         [{
-            item: "PANDA",
+            item: BET_ITEM_TYPE.LOW_YIELD_ITEM.DOG,
             value: 300
         }]));
 
@@ -109,9 +110,11 @@ test('Should add bets', async () => {
 
     expect(betManager.bettingqueue[0].bets).toEqual(expect.arrayContaining(
         [{
-            item: "FOX",
+            item: BET_ITEM_TYPE.HIGH_YIELD_ITEM.FOX,
             value: 450
         }]));
+
+    betManager.clearBet();
 })
 
 
@@ -119,43 +122,43 @@ test('Should Not Add More Bets', async () => {
     const bets = [{
         _id: userOne._id,
         bet: {
-            item: "COW",
+            item: BET_ITEM_TYPE.LOW_YIELD_ITEM.ORCA,
             value: 300
         }
     }, {
         _id: userOne._id,
         bet: {
-            item: "PANDA",
+            item: BET_ITEM_TYPE.LOW_YIELD_ITEM.ELEPHANT,
             value: 300
         }
     },{
         _id: userOne._id,
         bet: {
-            item: "HORSE",
+            item: BET_ITEM_TYPE.LOW_YIELD_ITEM.DOG,
             value: 300
         }
     },{
         _id: userOne._id,
         bet: {
-            item: "FOX",
+            item: BET_ITEM_TYPE.HIGH_YIELD_ITEM.FOX,
             value: 450
         }
     },{
         _id: userOne._id,
         bet: {
-            item: "LION",
+            item: BET_ITEM_TYPE.HIGH_YIELD_ITEM.LION,
             value: 300
         }
     },{
         _id: userOne._id,
         bet: {
-            item: "T_REX",
+            item: BET_ITEM_TYPE.HIGH_YIELD_ITEM.T_REX,
             value: 200
         }
     },{
         _id: userOne._id,
         bet: {
-            item: "PYTHON",
+            item: BET_ITEM_TYPE.HIGH_YIELD_ITEM.SNAKE,
             value: 300
         }
     }]
@@ -173,7 +176,7 @@ test('Should Not Add More Bets', async () => {
         .set({ Authorization: `Bearer ${userOne.tokens[0].token}`  }).send(bets[4]).expect(200);
     await request(app).post('/bet')
         .set({ Authorization: `Bearer ${userOne.tokens[0].token}`  }).send(bets[5]).expect(200);
-    const response =await request(app).post('/bet')
+    await request(app).post('/bet')
         .set({ Authorization: `Bearer ${userOne.tokens[0].token}`  }).send(bets[6]).expect(400);
 })
 
