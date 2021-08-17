@@ -8,7 +8,7 @@ const path = require('path');
 const auth = require('./middlewares/auth');
 const { betManager } = require('./game-util/betManager'); 
 const cors = require('cors');
-const hbs = require('hbs');
+const handlebars = require('express-handlebars');
 
 const socketio = require('socket.io');
 const http = require('http');
@@ -18,11 +18,15 @@ const io = socketio(server);
 
 // define paths for Express config
 const publicDirectoryPath = path.join(__dirname, './public');
-const viewsPath = path.join(__dirname, './templates/views');
-const partialsPath = path.join(__dirname, './templates/partials');
+const layoutsPath = path.join(__dirname, './views/layouts');
+const partialsPath = path.join(__dirname, './views/partials');
 
 // Set up handlebars engine and views location
-app.use(express.static(__dirname + '/static'));
+app.set('view engine', 'ejs');
+
+
+app.use(express.static(publicDirectoryPath));
+
 app.use(express.json());
 app.use(cors());
 
@@ -52,8 +56,14 @@ const UserRouter = require('./routes/user');
 app.use(UserRouter);
 
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/index.html');
+  res.render('pages/index');
 });
+
+app.get('/game', (req, res) => {
+  res.render('pages/game');
+});
+
+
 
 app.post('/bet', auth, async (req, res) => {
   try {
@@ -86,5 +96,6 @@ io.on('connection', (socket) => {
     console.log('client disconnected from server');
   })
 })
+
 
 module.exports = server;
