@@ -8,7 +8,7 @@ const path = require('path');
 const auth = require('./middlewares/auth');
 const { betManager } = require('./game-util/betManager'); 
 const cors = require('cors');
-const handlebars = require('express-handlebars');
+const User = require('./models/user');
 
 const socketio = require('socket.io');
 const http = require('http');
@@ -18,8 +18,6 @@ const io = socketio(server);
 
 // define paths for Express config
 const publicDirectoryPath = path.join(__dirname, './public');
-const layoutsPath = path.join(__dirname, './views/layouts');
-const partialsPath = path.join(__dirname, './views/partials');
 
 // Set up handlebars engine and views location
 app.set('view engine', 'ejs');
@@ -36,22 +34,6 @@ const timeInterval = 35 * 1000;
 /*
 Salad Game Process interval set up
 */
-const withTimeout = (onSuccess, onTimeout, timeout) => {
-  let called = false;
-
-  const timer = setTimeout(() => {
-    if (called) return;
-    called = true;
-    onTimeout();
-  }, timeout);
-
-  return (...args) => {
-    if (called) return;
-    called = true;
-    clearTimeout(timer);
-    onSuccess.apply(this, args);
-  }
-}
 if (process.env.NODE_ENV !== 'test') {
   setInterval(function() {
     console.log("Lucky Draw starting-------------------------------");
@@ -61,7 +43,7 @@ if (process.env.NODE_ENV !== 'test') {
     // process winners 
     betManager.processBetResult(result);
     // emit update to client
-    io.sockets.emit('update')
+    io.emit('update')
     console.log('Last 8 result ' + saladGame.last8Results.toString());
   }, timeInterval);
 }
@@ -113,31 +95,46 @@ app.post('/bet', auth, async (req, res) => {
 })
 
 io.on('connection', (socket) => {
-
-  socket.on('join', (data) => {
-    console.log(data);
+  console.log('connection established ' + new Date(saladGame.nextDrawTime).toISOString());
+  socket.emit('gamesetting', {nextDrawTime: new Date(saladGame.nextDrawTime).toISOString() }, (error, success) => {
+    if (error) {
+      console.log(error)
+    } else {
+      console.log(success)
+    }
   })
+
+
+  socket.on('getresult', (callback) => {
+    callback(null, 'got result', {nextDrawTime: new Date(saladGame.nextDrawTime).toISOString() });
+  })
+
+
   socket.on('disconnect', () => {
     console.log('client disconnected from server');
   })
 
-  socket.on('bet', async (bet) => {
+  socket.on('bet', async (betInfo, callback) => {
     if (saladGame.allowBet) {
       //get user
-      const user = await User.find(bet._id);
+      const user = await User.findById(betInfo._id);
       //check if a user has enough money to bet and deduct money from user
-      user.money -= bet.value;
+      user.money -= betInfo.bet.value;
       if (user.money < 0) {
-        res.status(400).send({error: 'Insufficient fund'});
+        callback('Insufficient fund', null);
       } else {
         await user.save();
       }
 
-      betManager.addBet(req.body);
+      betManager.addBet(betInfo);
 
     } else {
-      
+      callback('You can not bet right now', null);
     }
+  })
+
+  socket.on('join', (data) => {
+    console.log(data);
   })
 })
 

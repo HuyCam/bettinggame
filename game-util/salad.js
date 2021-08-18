@@ -44,8 +44,11 @@ const saladGame = {
     initiateGame: function() {
         this.restTimer = 5 * 1000;
         this.drawTimer = 30 * 1000;
-        this.nextDrawTime = new Date().getTime + this.drawIntervalTime;
+        this.nextDrawTime = this.getNextDrawTime();
         this.allowBet = true;
+    },
+    getNextDrawTime() {
+        return new Date().getTime() + this.drawTimer;
     },
     pickItemType : function() {
         let randomVal = getRandomInt(gameSetting.MAX_RANDOMIZED);
@@ -82,10 +85,13 @@ const saladGame = {
         setTimeout(function() {
             console.log('You can start betting');
             that.allowBet = true;
+            
         }, that.restTimer);
 
         // save result
         this.saveResult(item);
+        // set nextDrawTime
+        this.nextDrawTime = this.getNextDrawTime() + that.restTimer;
         // return result
         return item;
     },
