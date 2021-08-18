@@ -4,10 +4,116 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
     <title>Document</title>
 </head>
 <body>
-    <h1>index</h1>
+<div class="body">
+    <h1 id="title">Animal World</h1>
+    <div class="container game-board">
+        <div class="row">
+            <div class="item-container col-sm">
+                <div class="item item-detail">
+                    5 times
+                </div>
+                <div class="item item-icon">
+                    <img class="bet-item" src="/img/icons8-dog.svg" alt="dog">
+                </div>
+                <div class="item item-bet">
+                    
+                </div>   
+            </div>
+            <div class="item-container col-sm">
+                <div class="item item-detail">
+                    5 times
+                </div>
+                <div class="item item-icon">
+                    <img class="bet-item" src="/img/icons8-bull.svg" alt="bull">
+                </div>
+                <div class="item item-bet">
+                    
+                </div>  
+            </div>
+            <div class="item-container col-sm">
+                <div class="item item-detail">
+                    10 times
+                </div>
+                <div class="item item-icon">
+                    <img class="bet-item" src="/img/icons8-fox.svg" alt="fox">
+                </div>
+                <div class="item item-bet">
+                    
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="item-container col-sm">
+                <div class="item item-detail">
+                    5 times
+                </div>
+                <div class="item item-icon">
+                    <img class="bet-item" src="/img/icons8-elephant-circus.svg" alt="elephant">
+                </div>
+                <div class="item item-bet">
+                    
+                </div>
+            </div>
+            <div class="item-container col-sm">
+                <div class="item item-icon">
+                    <p>Timer</p>
+                    <p id="timer"></p>
+                </div>
+                
+            </div>
+            <div class="item-container col-sm">
+                <div class="item item-detail">
+                    5 times
+                </div>
+                <div class="item item-icon">
+                    <img class="bet-item" src="/img/icons8-rattlesnake.svg" alt="elephant">
+                </div>
+                <div class="item item-bet">
+                    
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="item-container col-sm">
+                <div class="item item-detail">
+                    5 times
+                </div>
+                <div class="item item-icon">
+                    <img class="bet-item" src="/img/icons8-orca.svg" alt="orca">
+                </div>
+                <div class="item item-bet">
+                    
+                </div>
+            </div>
+            <div class="item-container col-sm">
+                <div class="item item-detail">
+                    5 times
+                </div>
+                <div class="item item-icon">
+                    <img class="bet-item" src="/img/icons8-year-of-dragon.svg" alt="dinosaur">
+                </div>
+                <div class="item item-bet">
+                    
+                </div>
+            </div>
+            <div class="item-container col-sm">
+                <div class="item item-detail">
+                    5 times
+                </div>
+                <div class="item item-icon">
+                    <img class="bet-item" src="/img/icons8-lion-circus.svg" alt="lion">
+                </div>
+                <div class="item item-bet">
+                    
+                </div>     
+            </div>
+        </div>
+    </div>
     <div id="bet">
         <button>DOG</button>
         <button>BULL</button>
@@ -19,13 +125,13 @@
         <button>T_REX</button>
     </div>
     <div>
-        <p>Timer</p>
-        <p id="timer"></p>
+        
     </div>
+</div>
     
-
+    <script src="game.js"></script>
     <script src="/socket.io/socket.io.js"></script>
          <!-- <script src="https://cdn.socket.io/3.1.3/socket.io.min.js" integrity="sha384-cPwlPLvBTa3sKAgddT6krw0cJat7egBga3DJepJyrLl4Q9/5WLra3rrnMcyTyOnh" crossorigin="anonymous"></script> -->
-         <script src="/js/index.js"></script>
+    <script src="/js/index.js"></script>
 </body>
 </html>

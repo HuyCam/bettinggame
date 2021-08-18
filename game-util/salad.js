@@ -37,13 +37,11 @@ const getRandomInt = (max) => {
 const saladGame = {
     nextDrawTime: 0,
     allowBet: false,
-    drawTimer: 0,
-    restTimer: 0,
+    drawTimer: 30000,
+    restTimer: 10000,
     last8Results: new Array(),
     lastResult:"",
     initiateGame: function() {
-        this.restTimer = 5 * 1000;
-        this.drawTimer = 30 * 1000;
         this.nextDrawTime = this.getNextDrawTime();
         this.allowBet = true;
     },

@@ -29,7 +29,7 @@ app.use(express.json());
 app.use(cors());
 
 saladGame.initiateGame();
-const timeInterval = 35 * 1000;
+const timeInterval = (saladGame.restTimer + saladGame.drawTimer);
 
 /*
 Salad Game Process interval set up
@@ -37,7 +37,6 @@ Salad Game Process interval set up
 if (process.env.NODE_ENV !== 'test') {
   setInterval(function() {
     console.log("Lucky Draw starting-------------------------------");
-    io.sockets.emit('submitbet', {}, )
     let result = saladGame.draw();
     console.log("result " + result);
     // process winners 

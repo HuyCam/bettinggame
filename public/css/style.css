@@ -1,0 +1,31 @@
+.body {
+    max-width: 500px;
+    margin: auto;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+}
+.container .item{
+    text-align: center;
+}
+
+.container .item-container {
+    border: 1px solid black;
+    border-radius: 5px;
+    margin: .5em;
+}
+
+.container .item-container .item-detail{
+    border-bottom: 2px solid black;
+}
+
+.container .item-container .item-bet{
+    height: 1em;
+}
+
+#title {
+ text-align: center;
+}
+
+.bet-item {
+    width: 100px;
+}
