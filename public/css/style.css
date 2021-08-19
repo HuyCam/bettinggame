@@ -3,13 +3,15 @@
     margin: auto;
     border-left: 1px solid black;
     border-right: 1px solid black;
+    background-color: rgba(255,220,115, .8);
+    padding-top: 1em;
+    padding-bottom: 1em;
 }
 .container .item{
     text-align: center;
 }
 
 .container .item-container {
-    border: 1px solid black;
     border-radius: 5px;
     margin: .5em;
 }
@@ -22,10 +24,93 @@
     height: 1em;
 }
 
+.container .item-container .bet-item {
+    border: 3px solid #9F8066;
+    border-radius: 50%;
+    margin-top: .5em;
+    background-color: aliceblue;
+}
+
 #title {
  text-align: center;
 }
 
 .bet-item {
     width: 100px;
+    cursor: pointer;
 }
+
+#login {
+    margin: 1em 1em;
+}
+#secondary .bet-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+/*Bet amount design*/
+#secondary .bet-container .bet-amount{
+    width: 3em;
+    height: 3em;
+    line-height: 3em;
+    text-align: center;
+    border-radius: 50%;
+    font-weight: bold;
+    border-left: 2px solid black;
+    border-bottom: 2px solid black;
+    border-top: 1px solid black;
+    border-right: 1px solid black;
+    cursor: pointer;
+    background: rgb(255, 220, 115);
+    background: linear-gradient(90deg, rgba(255, 220, 115, 1) 0%, rgba(189, 141, 0, 1));
+    margin: .5em;
+}
+
+#secondary .bet-container .bet-amount:hover {
+    box-shadow: -3px 2px #888888;
+}
+
+.money-view {
+    border: 1px solid black;
+    border-radius: .5em;
+    width: 90%;
+    margin: auto;
+    text-align: center;
+    background-color: aliceblue;
+}
+.money-view p{
+    line-height: 2em;
+    margin:0;
+}
+.money-view img{
+    width: 2em;
+}
+
+
+#secondary .bet-container .bet-picked {
+    box-shadow: -3px 2px #888888;
+}
+
+/*Result and result item css*/
+#result-container {
+    width: 95%;
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    background-color: rgba(255, 123, 123, 0.7);
+    border-radius: .5em;
+    color: white;
+    line-height: 50px;
+    text-align: center;
+    font-weight: bold;
+}
+.result-item {
+    border-radius: 50%;
+    border: 2px solid black;
+    width: 2.5em;
+    height: 2.5em;
+    margin: .1em;
+    background-color: aliceblue;
+  }

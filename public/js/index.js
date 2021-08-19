@@ -1,5 +1,5 @@
-const socket = io('');
-
+// const socket = io('');
+/*
 socket.on('connection', () => {
     socket.emit('join');
 })
@@ -65,3 +65,4 @@ document.getElementById('bet').addEventListener('click', (e) => {
     }
 
 })
+*/

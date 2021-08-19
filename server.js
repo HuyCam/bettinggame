@@ -53,13 +53,13 @@ const UserRouter = require('./routes/user');
 // use router
 app.use(UserRouter);
 
-app.get('/', (req, res) => {
-  res.render('pages/index');
-});
+// app.get('/', (req, res) => {
+//   res.render('pages/index');
+// });
 
-app.get('/game', (req, res) => {
-  res.render('pages/game');
-});
+// app.get('/game', (req, res) => {
+//   res.render('pages/game');
+// });
 
 /*
  betbody: {
@@ -70,6 +70,13 @@ app.get('/game', (req, res) => {
    }]
  }
 */
+
+app.get('/me', auth, async (req, res) => {
+  const user = await req.user.toJSON();
+  res.status(200).send({
+    user: user
+  })
+})
 
 app.post('/bet', auth, async (req, res) => {
   try {
@@ -95,7 +102,10 @@ app.post('/bet', auth, async (req, res) => {
 
 io.on('connection', (socket) => {
   console.log('connection established ' + new Date(saladGame.nextDrawTime).toISOString());
-  socket.emit('gamesetting', {nextDrawTime: new Date(saladGame.nextDrawTime).toISOString() }, (error, success) => {
+  socket.emit('gamesetting', {
+    nextDrawTime: new Date(saladGame.nextDrawTime).toISOString(),
+    last8Results: saladGame.last8Results
+   }, (error, success) => {
     if (error) {
       console.log(error)
     } else {
@@ -105,7 +115,11 @@ io.on('connection', (socket) => {
 
 
   socket.on('getresult', (callback) => {
-    callback(null, 'got result', {nextDrawTime: new Date(saladGame.nextDrawTime).toISOString() });
+    callback(null, 'got result', {
+      nextDrawTime: new Date(saladGame.nextDrawTime).toISOString(),
+      result: saladGame.lastResult,
+      last8Results: saladGame.last8Results 
+    });
   })
 
 
@@ -114,22 +128,32 @@ io.on('connection', (socket) => {
   })
 
   socket.on('bet', async (betInfo, callback) => {
-    if (saladGame.allowBet) {
-      //get user
-      const user = await User.findById(betInfo._id);
-      //check if a user has enough money to bet and deduct money from user
-      user.money -= betInfo.bet.value;
-      if (user.money < 0) {
-        callback('Insufficient fund', null);
+    try {
+      if (saladGame.allowBet) {
+        //get user
+        const user = await User.findById(betInfo._id);
+        //check if a user has enough money to bet and deduct money from user
+        user.money -= betInfo.bet.value;
+        if (user.money < 0) {
+          callback('Insufficient fund', null);
+        } else {
+          await user.save();
+        }
+  
+        let result = betManager.addBet(betInfo);
+        if (result) {
+          callback(null, 'Success');
+        } else {
+          callback('Fail', null);
+        }
+  
       } else {
-        await user.save();
+        callback('You can not bet right now', null);
       }
-
-      betManager.addBet(betInfo);
-
-    } else {
-      callback('You can not bet right now', null);
+    } catch(e) {
+      callback(e.message, null);
     }
+    
   })
 
   socket.on('join', (data) => {

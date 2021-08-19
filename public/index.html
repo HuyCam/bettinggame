@@ -10,126 +10,40 @@
 </head>
 <body>
 <div class="body">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <h1 id="title">Animal World</h1>
-    <div class="container game-board">
-        <div class="row">
-            <div class="item-container col-sm">
-                <div class="item item-detail">
-                    5 times
-                </div>
-                <div class="item item-icon">
-                    <img class="bet-item" src="/img/icons8-dog.svg" alt="dog">
-                </div>
-                <div class="item item-bet">
-                    
-                </div>   
-            </div>
-            <div class="item-container col-sm">
-                <div class="item item-detail">
-                    5 times
-                </div>
-                <div class="item item-icon">
-                    <img class="bet-item" src="/img/icons8-bull.svg" alt="bull">
-                </div>
-                <div class="item item-bet">
-                    
-                </div>  
-            </div>
-            <div class="item-container col-sm">
-                <div class="item item-detail">
-                    10 times
-                </div>
-                <div class="item item-icon">
-                    <img class="bet-item" src="/img/icons8-fox.svg" alt="fox">
-                </div>
-                <div class="item item-bet">
-                    
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="item-container col-sm">
-                <div class="item item-detail">
-                    5 times
-                </div>
-                <div class="item item-icon">
-                    <img class="bet-item" src="/img/icons8-elephant-circus.svg" alt="elephant">
-                </div>
-                <div class="item item-bet">
-                    
-                </div>
-            </div>
-            <div class="item-container col-sm">
-                <div class="item item-icon">
-                    <p>Timer</p>
-                    <p id="timer"></p>
-                </div>
-                
-            </div>
-            <div class="item-container col-sm">
-                <div class="item item-detail">
-                    5 times
-                </div>
-                <div class="item item-icon">
-                    <img class="bet-item" src="/img/icons8-rattlesnake.svg" alt="elephant">
-                </div>
-                <div class="item item-bet">
-                    
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="item-container col-sm">
-                <div class="item item-detail">
-                    5 times
-                </div>
-                <div class="item item-icon">
-                    <img class="bet-item" src="/img/icons8-orca.svg" alt="orca">
-                </div>
-                <div class="item item-bet">
-                    
-                </div>
-            </div>
-            <div class="item-container col-sm">
-                <div class="item item-detail">
-                    5 times
-                </div>
-                <div class="item item-icon">
-                    <img class="bet-item" src="/img/icons8-year-of-dragon.svg" alt="dinosaur">
-                </div>
-                <div class="item item-bet">
-                    
-                </div>
-            </div>
-            <div class="item-container col-sm">
-                <div class="item item-detail">
-                    5 times
-                </div>
-                <div class="item item-icon">
-                    <img class="bet-item" src="/img/icons8-lion-circus.svg" alt="lion">
-                </div>
-                <div class="item item-bet">
-                    
-                </div>     
-            </div>
-        </div>
-    </div>
-    <div id="bet">
-        <button>DOG</button>
-        <button>BULL</button>
-        <button>ORCA</button>
-        <button>ELEPHANT</button>
-        <button>FOX</button>
-        <button>SNAKE</button>
-        <button>LION</button>
-        <button>T_REX</button>
-    </div>
-    <div>
+    <div id="main">
         
+
+    </div>
+    <div id="secondary">
+        <div class="money-view">
+            <p><img src="/img/cash.svg"> <span id="money"></span></p>
+        </div>
+        <div class="container bet-container">
+            <div class="bet-amount" id="10">
+                10
+            </div>
+            <div class="bet-amount" id="50">
+                50
+            </div>
+            <div class="bet-amount" id="100">
+                100
+            </div>
+            <div class="bet-amount" id="1000">
+                1000
+            </div>
+        </div>
+    </div>
+    <div id="result-container">
+        Result:
+        <div id="result">
+
+        </div>
     </div>
 </div>
     
-    <script src="game.js"></script>
+    <script src="/js/game.js"></script>
     <script src="/socket.io/socket.io.js"></script>
          <!-- <script src="https://cdn.socket.io/3.1.3/socket.io.min.js" integrity="sha384-cPwlPLvBTa3sKAgddT6krw0cJat7egBga3DJepJyrLl4Q9/5WLra3rrnMcyTyOnh" crossorigin="anonymous"></script> -->
     <script src="/js/index.js"></script>
