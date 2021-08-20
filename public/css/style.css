@@ -29,6 +29,8 @@
 }
 
 .container .item-container .item-bet{
+    font-size: 2.5em;
+    font-size: bold;
     height: 1em;
 }
 
@@ -37,10 +39,7 @@
     border-radius: 50%;
     margin-top: .5em;
     background-color: aliceblue;
-}
-
-.item-container {
-
+    width: 100%;
 }
 
 .container .item-container .bet-item img {
@@ -64,9 +63,27 @@
     flex-direction: row;
     justify-content: center;
 }
+/*cash*/
+.money-view {
+    font-size: 2.5em;
+    border: 1px solid black;
+    border-radius: .5em;
+    width: 90%;
+    margin: auto;
+    text-align: center;
+    background-color: aliceblue;
+}
+.money-view p{
+    line-height: 2em;
+    margin:0;
+}
+.money-view img{
+    width: 2em;
+}
 
 /*Bet amount design*/
 #secondary .bet-container .bet-amount{
+    font-size: 2.5em;
     width: 3em;
     height: 3em;
     line-height: 3em;
@@ -87,25 +104,11 @@
     box-shadow: -3px 2px #888888;
 }
 
-.money-view {
-    border: 1px solid black;
-    border-radius: .5em;
-    width: 90%;
-    margin: auto;
-    text-align: center;
-    background-color: aliceblue;
-}
-.money-view p{
-    line-height: 2em;
-    margin:0;
-}
-.money-view img{
-    width: 2em;
-}
+
 
 
 #secondary .bet-container .bet-picked {
-    box-shadow: -3px 2px #888888;
+    box-shadow: -12px 8px #888888;
 }
 
 /*Result and result item css*/
@@ -118,15 +121,31 @@
     background-color: rgba(255, 123, 123, 0.7);
     border-radius: .5em;
     color: white;
-    line-height: 50px;
+    line-height: 6em;
+    height: 6em;
     text-align: center;
     font-weight: bold;
 }
+
+#result-container .text {
+    font-size: 1.5em;
+}
+
+
 .result-item {
     border-radius: 50%;
     border: 2px solid black;
+    font-size: 2em;
     width: 2.5em;
     height: 2.5em;
     margin: .1em;
     background-color: aliceblue;
-  }
+}
+
+#result-container .high-yield-item {
+    background-color: rgb(255, 220, 115);
+}
+
+img[data-index='3'] {
+    color: red;
+}

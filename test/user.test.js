@@ -146,13 +146,13 @@ test('Should Not Add More Bets', async () => {
     },{
         _id: userOne._id,
         bet: {
-            item: BET_ITEM_TYPE.HIGH_YIELD_ITEM.LION,
+            item: BET_ITEM_TYPE.HIGH_YIELD_ITEM.JAGUAR,
             value: 300
         }
     },{
         _id: userOne._id,
         bet: {
-            item: BET_ITEM_TYPE.HIGH_YIELD_ITEM.T_REX,
+            item: BET_ITEM_TYPE.HIGH_YIELD_ITEM.LION,
             value: 200
         }
     },{

@@ -3,8 +3,8 @@ const BET_ITEM_TYPE = {
         TYPE: 'PINK',
         FOX: 'FOX',
         SNAKE: 'SNAKE',
-        LION: 'LION',
-        T_REX: 'T_REX'
+        JAGUAR: 'JAGUAR',
+        LION: 'LION'
     },
     LOW_YIELD_ITEM: {
         TYPE: 'BLUE',
@@ -20,8 +20,8 @@ const gameSetting = {
     ITEM_WIN_TIMES: {
         FOX: 10,
         SNAKE: 15,
-        LION: 25,
-        T_REX: 45,
+        JAGUAR: 25,
+        LION: 45,
         BULL: 5,
         DOG: 5,
         ELEPHANT: 5,
@@ -35,8 +35,8 @@ const gameSetting = {
         ORCA: '/img/orca.svg',
         FOX: '/img/fox.svg',
         SNAKE: '/img/snake.svg',
+        JAGUAR: '/img/jaguar.svg',
         LION: '/img/lion.svg',
-        T_REX: '/img/t_rex.svg',
         CASH: '/img/cash.svg'
     }
 }
@@ -51,7 +51,7 @@ let view = {
                             ${itemWinTimes.DOG} times
                         </div>
                         <div class="item item-icon">
-                            <img class="bet-item" id="dog" src="${gameSetting.imageSrc.DOG}" alt="dog">
+                            <img class="bet-item animate__animated" data-index="7" id="dog" src="${gameSetting.imageSrc.DOG}" alt="dog">
                         </div>
                         <div class="item item-bet" id="dog-bet-amount">
                             
@@ -62,7 +62,7 @@ let view = {
                             ${itemWinTimes.BULL} times
                         </div>
                         <div class="item item-icon">
-                            <img class="bet-item" id="bull" src="${gameSetting.imageSrc.BULL}" alt="bull">
+                            <img class="bet-item animate__animated" data-index="6" id="bull" src="${gameSetting.imageSrc.BULL}" alt="bull">
                         </div>
                         <div class="item item-bet" id="bull-bet-amount">
                             
@@ -73,7 +73,7 @@ let view = {
                             ${itemWinTimes.FOX} times
                         </div>
                         <div class="item item-icon">
-                            <img class="bet-item" id="fox" src="${gameSetting.imageSrc.FOX}" alt="fox">
+                            <img class="bet-item animate__animated" data-index="5" id="fox" src="${gameSetting.imageSrc.FOX}" alt="fox">
                         </div>
                         <div class="item item-bet" id="fox-bet-amount">
                             
@@ -86,7 +86,7 @@ let view = {
                             ${itemWinTimes.ELEPHANT} times
                         </div>
                         <div class="item item-icon">
-                            <img class="bet-item" id="elephant" src="${gameSetting.imageSrc.ELEPHANT}" alt="elephant">
+                            <img class="bet-item animate__animated"  data-index="0" id="elephant" src="${gameSetting.imageSrc.ELEPHANT}" alt="elephant">
                         </div>
                         <div class="item item-bet" id="elephant-bet-amount">
                             
@@ -104,7 +104,7 @@ let view = {
                             ${itemWinTimes.SNAKE} times
                         </div>
                         <div class="item item-icon">
-                            <img class="bet-item" id="snake" src="${gameSetting.imageSrc.SNAKE}" alt="snake">
+                            <img class="bet-item animate__animated" data-index="4" id="snake" src="${gameSetting.imageSrc.SNAKE}" alt="snake">
                         </div>
                         <div class="item item-bet" id="snake-bet-amount">
                             
@@ -117,20 +117,9 @@ let view = {
                             ${itemWinTimes.ORCA} times
                         </div>
                         <div class="item item-icon">
-                            <img class="bet-item" id="orca" src="${gameSetting.imageSrc.ORCA}" alt="orca">
+                            <img class="bet-item animate__animated" data-index="1" id="orca" src="${gameSetting.imageSrc.ORCA}" alt="orca">
                         </div>
                         <div class="item item-bet" id="orca-bet-amount">
-                            
-                        </div>
-                    </div>
-                    <div class="item-container col-md">
-                        <div class="item item-detail">
-                            ${itemWinTimes.T_REX} times
-                        </div>
-                        <div class="item item-icon">
-                            <img class="bet-item" id="t_rex" src="${gameSetting.imageSrc.T_REX}" alt="t_rex">
-                        </div>
-                        <div class="item item-bet" id="t_rex-bet-amount">
                             
                         </div>
                     </div>
@@ -139,9 +128,20 @@ let view = {
                             ${itemWinTimes.LION} times
                         </div>
                         <div class="item item-icon">
-                            <img class="bet-item" id="lion" src="${gameSetting.imageSrc.LION}" alt="lion">
+                            <img class="bet-item animate__animated" data-index="2" id="lion" src="${gameSetting.imageSrc.LION}" alt="lion">
                         </div>
                         <div class="item item-bet" id="lion-bet-amount">
+                            
+                        </div>
+                    </div>
+                    <div class="item-container col-md">
+                        <div class="item item-detail">
+                            ${itemWinTimes.JAGUAR} times
+                        </div>
+                        <div class="item item-icon">
+                            <img class="bet-item animate__animated" data-index="3" id="jaguar" src="${gameSetting.imageSrc.JAGUAR}" alt="jaguar">
+                        </div>
+                        <div class="item item-bet" id="jaguar-bet-amount">
                             
                         </div>     
                     </div>
@@ -166,6 +166,16 @@ let view = {
             let imgEle = document.createElement("img");
             imgEle.classList.add("result-item");
             imgEle.src = gameSetting.imageSrc[value];
+
+            switch(value) {
+                case BET_ITEM_TYPE.HIGH_YIELD_ITEM.FOX:
+                case BET_ITEM_TYPE.HIGH_YIELD_ITEM.SNAKE:
+                case BET_ITEM_TYPE.HIGH_YIELD_ITEM.JAGUAR:
+                case BET_ITEM_TYPE.HIGH_YIELD_ITEM.LION:
+                    imgEle.classList.add("high-yield-item");
+                    break;
+            }
+
             $('#result').append(imgEle)
         })
     }
@@ -183,8 +193,8 @@ let model = {
         orca: 0,
         fox: 0,
         snake: 0,
-        lion: 0,
-        t_rex: 0
+        jaguar: 0,
+        lion: 0
     },
     timeCount: 0,
     updateBetAmount: function(betItem, amount) {
@@ -199,8 +209,8 @@ let model = {
         this.betItem.orca = 0;
         this.betItem.fox = 0;
         this.betItem.snake = 0;
+        this.betItem.jaguar = 0;
         this.betItem.lion = 0;
-        this.betItem.t_rex = 0;
     },
     setMoney: function(money) {
         this.user.money = money;
@@ -305,7 +315,7 @@ window.onload = async function() {
 
     $('.bet-item').on('click', (e) => { 
         console.log('click bet-item');
-        const betAmount = model.betamount;
+        const betAmount = utils.clone(model.betamount);
         const betItem = e.target.id;
         const betElementId = `#${betItem}-bet-amount`;
         // emit bet value to server        
@@ -315,15 +325,17 @@ window.onload = async function() {
                         "item": betItem.toUpperCase(),
                         "value": betAmount
                 }
-            }, (error,success) => {
+            }, (error,success, body) => {
                 if (error) {
                     // if you can not bet due to time is over
                     console.log(error);
                 } else {
                     // update bet on model
                     const result = model.updateBetAmount(betItem, betAmount);
+                    console.log('bet info');
+                    console.log(body);
                     // deduct money
-                    control.calculateMoney(0 - betAmount);
+                    control.calculateMoney(0 - body.bet.value);
                     
                     $(betElementId).text(result);
                     console.log(success);
@@ -358,12 +370,17 @@ window.onload = async function() {
         callback(null, 'succesfully set up gamesetting');
     })
 
+    // update time and part of board view every second
     setInterval(function() {
         let displayTime = Math.trunc(model.timeCount / 1000);
         if (displayTime >= 0 && displayTime <= 30) {
             document.getElementById('timer').textContent = displayTime;
         }
-    
+        
+        $('.bet-item').removeClass('animate__pulse');
+        let $item = $(`img[data-index='${displayTime % 8}']`).addClass('animate__pulse');
+
+        // count down time
         model.timeCount -= 1000;
     }, 1000)
     

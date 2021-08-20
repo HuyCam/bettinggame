@@ -142,7 +142,7 @@ io.on('connection', (socket) => {
   
         let result = betManager.addBet(betInfo);
         if (result) {
-          callback(null, 'Success');
+          callback(null, 'Success', betInfo);
         } else {
           callback('Fail', null);
         }

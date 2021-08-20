@@ -3,8 +3,9 @@ const BET_ITEM_TYPE = {
         TYPE: 'PINK',
         FOX: 'FOX',
         SNAKE: 'SNAKE',
-        LION: 'LION',
-        T_REX: 'T_REX'
+        JAGUAR: 'JAGUAR',
+        LION: 'LION'
+
     },
     LOW_YIELD_ITEM: {
         TYPE: 'BLUE',
@@ -20,8 +21,8 @@ const gameSetting = {
     ITEM_WIN_TIMES: {
         FOX: 10,
         SNAKE: 15,
-        LION: 25,
-        T_REX: 45,
+        JAGUAR: 25,
+        LION: 45,
         BULL: 5,
         DOG: 5,
         ELEPHANT: 5,
@@ -42,7 +43,7 @@ const saladGame = {
     last8Results: new Array(),
     lastResult:"",
     initiateGame: function() {
-        this.nextDrawTime = this.getNextDrawTime();
+        this.nextDrawTime = this.getNextDrawTime() + this.restTimer;
         this.allowBet = true;
     },
     getNextDrawTime() {
@@ -65,9 +66,9 @@ const saladGame = {
         } else if (randomVal > 880 && randomVal <= 930) {
             result = BET_ITEM_TYPE.HIGH_YIELD_ITEM.SNAKE;
         } else if (randomVal > 930 && randomVal <= 970) {
-            result = BET_ITEM_TYPE.HIGH_YIELD_ITEM.LION;
+            result = BET_ITEM_TYPE.HIGH_YIELD_ITEM.JAGUAR;
         } else {
-            result = BET_ITEM_TYPE.HIGH_YIELD_ITEM.T_REX;
+            result = BET_ITEM_TYPE.HIGH_YIELD_ITEM.LION;
         }
 
         return result;

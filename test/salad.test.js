@@ -35,7 +35,7 @@ test('User should get winning Money', async () => {
     },{
         _id: userOne._id,
         bet: {
-            item: BET_ITEM_TYPE.HIGH_YIELD_ITEM.LION,
+            item: BET_ITEM_TYPE.HIGH_YIELD_ITEM.JAGUAR,
             value: 300
         }
     },{
@@ -47,7 +47,7 @@ test('User should get winning Money', async () => {
     },{
         _id: userOne._id,
         bet: {
-            item: BET_ITEM_TYPE.HIGH_YIELD_ITEM.T_REX,
+            item: BET_ITEM_TYPE.HIGH_YIELD_ITEM.LION,
             value: 300
         }
     }]
@@ -61,7 +61,7 @@ test('User should get winning Money', async () => {
     expect(aUser.money).toEqual(6000+1500);
 
     betManager.addBet(bets[6]);
-    saladGame.saveResult(BET_ITEM_TYPE.HIGH_YIELD_ITEM.T_REX);
+    saladGame.saveResult(BET_ITEM_TYPE.HIGH_YIELD_ITEM.LION);
     await betManager.processBetResult(saladGame.lastResult);
 
     aUser = await User.findById(userOne._id);
