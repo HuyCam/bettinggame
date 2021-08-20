@@ -46,7 +46,7 @@ let view = {
         let itemWinTimes = gameSetting.ITEM_WIN_TIMES;
         let html = `<div class="container game-board">
                 <div class="row">
-                    <div class="item-container col-sm">
+                    <div class="item-container col-md">
                         <div class="item item-detail">
                             ${itemWinTimes.DOG} times
                         </div>
@@ -57,7 +57,7 @@ let view = {
                             
                         </div>   
                     </div>
-                    <div class="item-container col-sm">
+                    <div class="item-container col-md">
                         <div class="item item-detail">
                             ${itemWinTimes.BULL} times
                         </div>
@@ -68,7 +68,7 @@ let view = {
                             
                         </div>  
                     </div>
-                    <div class="item-container col-sm">
+                    <div class="item-container col-md">
                         <div class="item item-detail">
                             ${itemWinTimes.FOX} times
                         </div>
@@ -81,7 +81,7 @@ let view = {
                     </div>
                 </div>
                 <div class="row">
-                    <div class="item-container col-sm">
+                    <div class="item-container col-md">
                         <div class="item item-detail">
                             ${itemWinTimes.ELEPHANT} times
                         </div>
@@ -92,14 +92,14 @@ let view = {
                             
                         </div>
                     </div>
-                    <div class="item-container col-sm">
+                    <div class="item-container col-md">
                         <div class="item item-icon">
                             <p>Timer</p>
                             <p id="timer"></p>
                         </div>
                         
                     </div>
-                    <div class="item-container col-sm">
+                    <div class="item-container col-md">
                         <div class="item item-detail">
                             ${itemWinTimes.SNAKE} times
                         </div>
@@ -112,7 +112,7 @@ let view = {
                     </div>
                 </div>
                 <div class="row">
-                    <div class="item-container col-sm">
+                    <div class="item-container col-md">
                         <div class="item item-detail">
                             ${itemWinTimes.ORCA} times
                         </div>
@@ -123,7 +123,7 @@ let view = {
                             
                         </div>
                     </div>
-                    <div class="item-container col-sm">
+                    <div class="item-container col-md">
                         <div class="item item-detail">
                             ${itemWinTimes.T_REX} times
                         </div>
@@ -134,7 +134,7 @@ let view = {
                             
                         </div>
                     </div>
-                    <div class="item-container col-sm">
+                    <div class="item-container col-md">
                         <div class="item item-detail">
                             ${itemWinTimes.LION} times
                         </div>
