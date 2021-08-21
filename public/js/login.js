@@ -23,9 +23,12 @@ window.onload = function() {
             })
         }).then((res) => res.json())
         .then(data => {
-            window.sessionStorage.setItem('token', data.token);
+            if (data.token) {
+                window.sessionStorage.setItem('token', data.token);
             window.location.href = "/";
             window.location.replace("/");
+            }
+            
         })
         .catch(function() {
                 console.log("error");

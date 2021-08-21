@@ -36,13 +36,14 @@ Salad Game Process interval set up
 */
 if (process.env.NODE_ENV !== 'test') {
   setInterval(function() {
+    io.emit('drawing');
     console.log("Lucky Draw starting-------------------------------");
     let result = saladGame.draw();
     console.log("result " + result);
     // process winners 
     betManager.processBetResult(result);
     // emit update to client
-    io.emit('update')
+    io.emit('update');
     console.log('Last 8 result ' + saladGame.last8Results.toString());
   }, timeInterval);
 }

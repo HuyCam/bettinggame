@@ -38,11 +38,22 @@ const gameSetting = {
         JAGUAR: '/img/jaguar.svg',
         LION: '/img/lion.svg',
         CASH: '/img/cash.svg'
-    }
+    },
+    gameState: {
+        BETTING: 'BETTING',
+        DRAWING: 'DRAWING',
+        RESULTING: 'RESULTING'
+    },
+    spinInterval: 200,
+    betInterval: 1000,
+    resultInterval: 1000,
+    spinCountDown: 50,
+    resultCountDown: 5
+    
 }
 
 let view = {
-    createBoardGame: function(userBet) {
+    createBoardGame: function() {
         let itemWinTimes = gameSetting.ITEM_WIN_TIMES;
         let html = `<div class="container game-board">
                 <div class="row">
@@ -93,9 +104,10 @@ let view = {
                         </div>
                     </div>
                     <div class="item-container col-md">
-                        <div class="item item-icon">
+                        <div class="item ">
                             <p>Timer</p>
                             <p id="timer"></p>
+                            <p id="noti-text"></p>
                         </div>
                         
                     </div>
@@ -178,13 +190,24 @@ let view = {
 
             $('#result').append(imgEle)
         })
+    },
+    displayTime: function(newTime) {
+        document.getElementById('timer').textContent = newTime;
+    },
+    displayNotiText: function(text) {
+        $('#noti-text').html(text);
     }
 }
 
 let model = {
+    nextDrawTime: null,
     gameState: '',
     id: '',
+    lastResult:'',
+    lastWinAmount: '',
+    lastBetAmount: '',
     last8Results: [],
+    notiText:'',
     betamount: 0,
     betItem: {
         bull: 0,
@@ -197,10 +220,12 @@ let model = {
         lion: 0
     },
     timeCount: 0,
+    spinCountDown: 0,
+    spinIntervalTime: 200,
+    secondIntervalTime: 1000,
     updateBetAmount: function(betItem, amount) {
         this.betItem[betItem] += amount;
         return this.betItem[betItem];
-        
     },
     resetBet: function() {
         this.betItem.bull = 0;
@@ -211,6 +236,18 @@ let model = {
         this.betItem.snake = 0;
         this.betItem.jaguar = 0;
         this.betItem.lion = 0;
+    },
+    calculateBetAmount: function() {
+        let lastBetAmount = 0;
+        lastBetAmount += this.betItem.bull;
+        lastBetAmount += this.betItem.dog;
+        lastBetAmount += this.betItem.elephant;
+        lastBetAmount += this.betItem.orca;
+        lastBetAmount += this.betItem.fox;
+        lastBetAmount += this.betItem.snake;
+        lastBetAmount += this.betItem.jaguar;
+        lastBetAmount += this.betItem.lion;
+        this.lastBetAmount = lastBetAmount;
     },
     setMoney: function(money) {
         this.user.money = money;
@@ -223,10 +260,61 @@ let model = {
     },
     setLast8Results: function(last8Results) {
         this.last8Results = last8Results;
+    },
+    setSpinCountDown: function (time) {
+        // time in mili
+        this.spinCountDown = time;
+    },
+    timeCountDown: function(deductAmount) {
+        model.timeCount -= deductAmount;
+    },
+    setGameState: function(gameState) {
+        let result = false;
+        switch(gameState) {
+            case gameSetting.gameState.BETTING:
+            case gameSetting.gameState.DRAWING:
+            case gameSetting.gameState.RESULTING:
+                this.gameState = gameState;
+                result = true;
+                return result;
+            default:
+                return result;
+        }
+        
+    },
+    setResult: function(result) {
+        this.lastResult = result;
     }
 }
 
+
 let control = {
+    initializeUser: async function() {
+        control.setGameState(gameSetting.gameState.BETTING);
+        const token = window.sessionStorage.getItem('token');
+
+        if (!token) {
+            window.location.href = "/login.html";
+            window.location.replace("/login.html");
+        } else {
+            // fetch user info and display boardgame, attach event listener etc
+            const response = await fetch('/me', {
+                method: 'GET',
+                mode: 'cors',
+                cache: 'no-cache',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+                redirect: 'follow',
+                referrerPolicy: 'no-referrer'
+            });
+    
+            const body = await response.json();
+            console.log(body);
+            model.user = body.user;
+            model.id = body.user._id;
+        }
+    },
     renderBoardGame: function() {
         let html = view.createBoardGame();
         document.getElementById('main').innerHTML = html;
@@ -235,12 +323,16 @@ let control = {
     },
     processNextDrawTime: (utcNextDrawTime) => {
         let nextDrawTime = new Date(utcNextDrawTime).getTime();
+        model.nextDrawTime = nextDrawTime;
         let now = new Date().getTime();
         let timeDif = nextDrawTime - now;
         model.timeCount = timeDif;
         return timeDif;
     },
-
+    getTimeRemaining: function (nextDrawTime) {
+        let now = new Date().getTime();
+        return model.nextDrawTime - now;
+    },
     resetBet: () => {
         model.resetBet();
         view.updateGameBoard();
@@ -254,6 +346,9 @@ let control = {
 
         view.updateMoneyView();
     },
+    calculateBetAmount: function() {
+        model.calculateBetAmount();
+    },
     setMoney: function(money) {
         model.setMoney(money);
         view.updateMoneyView();
@@ -262,45 +357,55 @@ let control = {
         const betItemName = result.toLowerCase();
         const itemWinTimes = gameSetting.ITEM_WIN_TIMES[result];
         const winAmount = parseInt(model.betItem[betItemName]) *  parseInt(itemWinTimes);
+        model.lastWinAmount = winAmount;
+        control.calculateBetAmount();
 
         this.calculateMoney(winAmount);
     },
     setLast8Results: function(last8Results) {
         model.setLast8Results(last8Results);
+        
+    },
+    setGameState: function(gameState) {
+        let result = model.setGameState(gameState);
+        if (!result) {
+            throw new Error('Invalid Game State');
+        }
+    },
+    displayTime: function(newTime) {
+        view.displayTime(newTime);
+    },
+    setResult: function(result) {
+        model.setResult(result);
+    },
+    displayNoti: function(text) {
+        model.notiText = text;
+        view.displayNotiText(model.notiText);
+    },
+    displayResult: function() {
+        
+    },
+    displayLast8Results: function() {
         view.displayLast8Results(model.last8Results);
+    },
+    setBettingInterval: function() {
+        control.displayNoti('');
+        control.setGameState(gameSetting.gameState.BETTING);
+        $('.bet-item').removeClass('animate__flash');
+        clearInterval(spinInterval);
+        itemSelectionInterval = setInterval(timeCountFunction, 1000);
     }
 }
 
-const initializeUser = async function() {
-    const token = window.sessionStorage.getItem('token');
-
-    if (!token) {
-        window.location.href = "/login.html";
-        window.location.replace("/login.html");
-    } else {
-        // fetch user info and display boardgame, attach event listener etc
-        const response = await fetch('/me', {
-            method: 'GET',
-            mode: 'cors',
-            cache: 'no-cache',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            },
-            redirect: 'follow',
-            referrerPolicy: 'no-referrer'
-        });
-
-        const body = await response.json();
-        console.log(body);
-        model.user = body.user;
-        model.id = body.user._id;
-    }
-}
+// const initializeUser = async function() {
+   
+// }
 
 window.onload = async function() {
-    await initializeUser();
+    await control.initializeUser();
     const socket = io('');
     control.renderBoardGame();
+    
     
     view.updateMoneyView();
 
@@ -314,7 +419,9 @@ window.onload = async function() {
     })
 
     $('.bet-item').on('click', (e) => { 
-        console.log('click bet-item');
+        if (model.gameState !== gameSetting.gameState.BETTING) {
+            return;
+        }
         const betAmount = utils.clone(model.betamount);
         const betItem = e.target.id;
         const betElementId = `#${betItem}-bet-amount`;
@@ -348,41 +455,105 @@ window.onload = async function() {
             if (error) {
                 console.log(error);
             } else if (success) {
+                //save game result
+                model.lastResult = utils.clone(body.result);
+            
                 // update money
                 control.calculateResult(body.result);
-                // reset bet
-                control.resetBet();
-                // display results
+                
+                // display 8 results
                 control.setLast8Results(body.last8Results);
+
+                //set game state
+                model.setGameState(gameSetting.gameState.RESULTING);
                 
                 console.log('next draw time ' + control.processNextDrawTime(body.nextDrawTime));
             }
         })
     })
 
+    socket.on('drawing', () => {
+        control.setGameState(gameSetting.gameState.DRAWING);
+    })
+
     socket.on('gamesetting', (body, callback) => {
-        let nextDrawTime = new Date(body.nextDrawTime).getTime();
-        let now = new Date().getTime();
-        let timeDif = nextDrawTime - now;
-        model.timeCount = timeDif;
+        // let nextDrawTime = new Date(body.nextDrawTime).getTime();
+        // let now = new Date().getTime();
+        // let timeDif = nextDrawTime - now;
+        // model.timeCount = timeDif;
+        control.processNextDrawTime(body.nextDrawTime);
 
         control.setLast8Results(body.last8Results);
+        control.displayLast8Results();
         callback(null, 'succesfully set up gamesetting');
     })
 
+    //
+    let resultTimeout = null;
+
+
+
     // update time and part of board view every second
-    setInterval(function() {
-        let displayTime = Math.trunc(model.timeCount / 1000);
+    var spinInterval = null;
+
+    var timeCountFunction = function() {
+        let displayTime = Math.trunc(control.getTimeRemaining() / 1000);
         if (displayTime >= 0 && displayTime <= 30) {
-            document.getElementById('timer').textContent = displayTime;
+            control.displayTime(displayTime);
         }
         
         $('.bet-item').removeClass('animate__pulse');
         let $item = $(`img[data-index='${displayTime % 8}']`).addClass('animate__pulse');
 
-        // count down time
-        model.timeCount -= 1000;
-    }, 1000)
+        // if displayTime  is 0 or gamestate is drawing start another interval
+        if (displayTime <= 1 || model.gameState === gameSetting.gameState.DRAWING) {
+            control.displayNoti('Drawing please wait ...');
+            control.displayTime(0);
+            $('.bet-item').removeClass('animate__pulse');
+            model.setSpinCountDown(gameSetting.spinCountDown);
+            spinInterval = setInterval(spinFunction, 200);
+            clearInterval(itemSelectionInterval);
+        }
+    };
+
+    var itemSelectionInterval = setInterval(timeCountFunction, 1000);
+    
+    var startResultingTimeout = function() {
+        control.displayNoti('Result: '+ `<img id="result-icon" src="${gameSetting.imageSrc[model.lastResult]}" alt="orca">` + '. You win this round: ' + model.lastWinAmount + '. You bet this round: ' + model.lastBetAmount);
+        setTimeout(startBettingInterval, 5000);
+        control.displayLast8Results();
+    }
+
+    var startBettingInterval = function() {
+        control.displayNoti('');
+        control.setGameState(gameSetting.gameState.BETTING);
+        // reset bet
+        control.resetBet();
+        
+        itemSelectionInterval = setInterval(timeCountFunction, 1000);
+    }
+    
+
+    var spinFunction = function() {
+        let displayTime = Math.trunc(control.getTimeRemaining() / 1000);
+        let timeCount = Math.trunc(model.spinCountDown); 
+        $('.bet-item').removeClass('animate__flash');
+        let index = Math.abs(timeCount % 8);
+        let $item = $(`img[data-index='${index}']`).addClass('animate__flash');
+
+        if (displayTime < 35 && model.gameState === gameSetting.gameState.RESULTING) {
+            // startBettingInterval();
+            startResultingTimeout();
+            $('.bet-item').removeClass('animate__flash');
+            clearInterval(spinInterval);
+            model.timeCountDown(200);
+            return;
+        }
+        let remainingTime = model.spinCountDown - 1;
+        model.setSpinCountDown(remainingTime);
+    }
+
+
     
     
 }
