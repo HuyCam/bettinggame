@@ -37,7 +37,9 @@ const gameSetting = {
         SNAKE: '/img/snake.svg',
         JAGUAR: '/img/jaguar.svg',
         LION: '/img/lion.svg',
-        CASH: '/img/cash.svg'
+        CASH: '/img/cash.svg',
+        GOLD_BAR: '/img/gold-bar.svg',
+        GOLD_COIN: '/img/gold-coin.svg'
     },
     gameState: {
         BETTING: 'BETTING',
@@ -344,7 +346,10 @@ let control = {
             model.deductMoney(money);
         }
 
-        view.updateMoneyView();
+        if (model.gameState === gameSetting.gameState.BETTING) {
+            view.updateMoneyView();
+        }
+        
     },
     calculateBetAmount: function() {
         model.calculateBetAmount();
@@ -359,12 +364,10 @@ let control = {
         const winAmount = parseInt(model.betItem[betItemName]) *  parseInt(itemWinTimes);
         model.lastWinAmount = winAmount;
         control.calculateBetAmount();
-
         this.calculateMoney(winAmount);
     },
     setLast8Results: function(last8Results) {
         model.setLast8Results(last8Results);
-        
     },
     setGameState: function(gameState) {
         let result = model.setGameState(gameState);
@@ -382,8 +385,13 @@ let control = {
         model.notiText = text;
         view.displayNotiText(model.notiText);
     },
-    displayResult: function() {
-        
+    displayResult: function(html) {
+        $('#last-result-view').removeClass('hiden');
+        $('#result-noti').html(html);
+    },
+    hideResult: function() {
+        $('#last-result-view').addClass('hiden');
+        $('#result-noti').html('');
     },
     displayLast8Results: function() {
         view.displayLast8Results(model.last8Results);
@@ -502,9 +510,10 @@ window.onload = async function() {
             control.displayTime(displayTime);
         }
         
+        // animate pulse animation
         $('.bet-item').removeClass('animate__pulse');
-        let $item = $(`img[data-index='${displayTime % 8}']`).addClass('animate__pulse');
-
+        let $item = $(`img[data-index='${displayTime % 8}']`);
+        $item.addClass('animate__pulse');
         // if displayTime  is 0 or gamestate is drawing start another interval
         if (displayTime <= 1 || model.gameState === gameSetting.gameState.DRAWING) {
             control.displayNoti('Drawing please wait ...');
@@ -519,13 +528,16 @@ window.onload = async function() {
     var itemSelectionInterval = setInterval(timeCountFunction, 1000);
     
     var startResultingTimeout = function() {
-        control.displayNoti('Result: '+ `<img id="result-icon" src="${gameSetting.imageSrc[model.lastResult]}" alt="orca">` + '. You win this round: ' + model.lastWinAmount + '. You bet this round: ' + model.lastBetAmount);
+        view.updateMoneyView();
+        control.displayResult(`<img id="result-icon" class="bet-item" src="${gameSetting.imageSrc[model.lastResult]}" alt="orca"> <p>You win this round: <img src="${gameSetting.imageSrc.GOLD_BAR}" /> ${model.lastWinAmount}</p> <p>You bet this round: <img src="${gameSetting.imageSrc.GOLD_COIN}" /> ${model.lastBetAmount}<p/>`)
+        // control.displayNoti('Result: '+ `<img id="result-icon" src="${gameSetting.imageSrc[model.lastResult]}" alt="orca">` + '. You win this round: ' + model.lastWinAmount + '. You bet this round: ' + model.lastBetAmount);
         setTimeout(startBettingInterval, 5000);
         control.displayLast8Results();
     }
 
     var startBettingInterval = function() {
         control.displayNoti('');
+        control.hideResult();
         control.setGameState(gameSetting.gameState.BETTING);
         // reset bet
         control.resetBet();

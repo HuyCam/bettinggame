@@ -1,3 +1,7 @@
+/*
+red: rgba(216,33,11,1)
+*/
+
 @import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
 .body {
     font-family: 'Nunito', sans-serif;
@@ -40,7 +44,10 @@
     margin-top: .5em;
     background-color: aliceblue;
     width: 100%;
+    filter: drop-shadow(0 0 20px #969696);
 }
+
+
 
 .container .item-container .bet-item img {
     font-size: 100px;
@@ -66,8 +73,12 @@
 .game-board .item-icon {
     padding: .5em;
     border: 1px solid black;
-    background-color: rgb(255,0,0);
+    background-color: blue;
     border-radius: 50%;
+}
+
+.item-icon  .pulse {
+    background-color: rgb(216,33,11);
 }
 
 .game-board .bet-item {
@@ -124,7 +135,9 @@
 
 
 #secondary .bet-container .bet-picked {
-    box-shadow: -12px 8px #888888;
+    background: rgb(249,142,146);
+    background: linear-gradient(90deg, rgba(249,142,146,1) 0%, rgba(216,33,11,1) 73%);
+    color: aliceblue;
 }
 
 /*Result and result item css*/
@@ -136,7 +149,7 @@
     justify-content: center;
     background-color: rgba(255, 123, 123, 0.7);
     border-radius: .5em;
-    color: white;
+    color: #f3f3f3;
     line-height: 6em;
     height: 6em;
     text-align: center;
@@ -162,9 +175,9 @@
     background-color: rgb(255, 220, 115);
 }
 
-img[data-index='3'] {
-    color: red;
-}
+/* img[data-index='3'] {
+    color: rgba(216,33,11,1);
+} */
 
 /*result view*/
 #last-result-view {
@@ -172,17 +185,37 @@ img[data-index='3'] {
     top: 0; 
     background-color: rgb(0, 0, 0);
     background-color: rgba(0, 0, 0, 0.5); /* Black see-through */
-    color: #f1f1f1; 
+    color: #f3f3f3; 
     width: 100%;
     height: 100%;
     transition: .5s ease;
-    opacity:1;
+    opacity: 1;
     color: white;
     font-size: 20px;
     padding: 20px;
     text-align: center;
+    display:flex;
+    z-index: 2;
+    align-items: center;
+    justify-content: center;
 }
 
-#result-icon {
-    width: 4em;
+#last-result-view #result-noti {
+    width: 15em;
+    margin: auto;
+    font-size: 1.5em;
+}
+
+#result-noti .bet-item {
+    filter: drop-shadow(0 0 40px #f1f1f1);
+}
+
+
+#result-noti .win-amount {
+    color:rgb(255, 212, 83);
+}
+
+.hiden {
+    z-index: -1 !important;
+    opacity: 0 !important;
 }
