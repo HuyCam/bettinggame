@@ -39,6 +39,11 @@ Supertest is able to manage the setup/teardown of an express/koa app itself if y
 which mean we don't import the app that call the .listen method. just call the server instance.
 
 
+disable double tab zoom:
+https://dev.to/jasperreddin/disabling-viewport-zoom-on-ios-14-web-browsers-l13
+
 resource:
 https://jsfiddle.net/huycam165/dLzqhb9u/42/
 https://animate.style/
+
+

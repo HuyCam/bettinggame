@@ -41,6 +41,16 @@ const gameSetting = {
         GOLD_BAR: '/img/gold-bar.svg',
         GOLD_COIN: '/img/gold-coin.svg'
     },
+    itemDataIndex: {
+        DOG: 7,
+        BULL: 6,
+        FOX: 5,
+        SNAKE: 4,
+        JAGUAR: 3,
+        LION: 2,
+        ORCA: 1,
+        ELEPHANT: 0
+    },
     gameState: {
         BETTING: 'BETTING',
         DRAWING: 'DRAWING',
@@ -49,7 +59,7 @@ const gameSetting = {
     spinInterval: 200,
     betInterval: 1000,
     resultInterval: 1000,
-    spinCountDown: 50,
+    spinCountDown: 500,
     resultCountDown: 5
     
 }
@@ -63,8 +73,8 @@ let view = {
                         <div class="item item-detail">
                             ${itemWinTimes.DOG} times
                         </div>
-                        <div class="item item-icon">
-                            <img class="bet-item animate__animated" data-index="7" id="dog" src="${gameSetting.imageSrc.DOG}" alt="dog">
+                        <div class="item item-icon animate__animated" data-index="7">
+                            <img class="bet-item animate__animated"  id="dog" src="${gameSetting.imageSrc.DOG}" alt="dog">
                         </div>
                         <div class="item item-bet" id="dog-bet-amount">
                             
@@ -74,8 +84,8 @@ let view = {
                         <div class="item item-detail">
                             ${itemWinTimes.BULL} times
                         </div>
-                        <div class="item item-icon">
-                            <img class="bet-item animate__animated" data-index="6" id="bull" src="${gameSetting.imageSrc.BULL}" alt="bull">
+                        <div class="item item-icon animate__animated" data-index="6">
+                            <img class="bet-item animate__animated"  id="bull" src="${gameSetting.imageSrc.BULL}" alt="bull">
                         </div>
                         <div class="item item-bet" id="bull-bet-amount">
                             
@@ -85,8 +95,8 @@ let view = {
                         <div class="item item-detail">
                             ${itemWinTimes.FOX} times
                         </div>
-                        <div class="item item-icon">
-                            <img class="bet-item animate__animated" data-index="5" id="fox" src="${gameSetting.imageSrc.FOX}" alt="fox">
+                        <div class="item item-icon animate__animated" data-index="5">
+                            <img class="bet-item animate__animated"  id="fox" src="${gameSetting.imageSrc.FOX}" alt="fox">
                         </div>
                         <div class="item item-bet" id="fox-bet-amount">
                             
@@ -98,8 +108,8 @@ let view = {
                         <div class="item item-detail">
                             ${itemWinTimes.ELEPHANT} times
                         </div>
-                        <div class="item item-icon">
-                            <img class="bet-item animate__animated"  data-index="0" id="elephant" src="${gameSetting.imageSrc.ELEPHANT}" alt="elephant">
+                        <div class="item item-icon animate__animated" data-index="0">
+                            <img class="bet-item animate__animated"   id="elephant" src="${gameSetting.imageSrc.ELEPHANT}" alt="elephant">
                         </div>
                         <div class="item item-bet" id="elephant-bet-amount">
                             
@@ -117,8 +127,8 @@ let view = {
                         <div class="item item-detail">
                             ${itemWinTimes.SNAKE} times
                         </div>
-                        <div class="item item-icon">
-                            <img class="bet-item animate__animated" data-index="4" id="snake" src="${gameSetting.imageSrc.SNAKE}" alt="snake">
+                        <div class="item item-icon animate__animated" data-index="4">
+                            <img class="bet-item animate__animated"  id="snake" src="${gameSetting.imageSrc.SNAKE}" alt="snake">
                         </div>
                         <div class="item item-bet" id="snake-bet-amount">
                             
@@ -130,8 +140,8 @@ let view = {
                         <div class="item item-detail">
                             ${itemWinTimes.ORCA} times
                         </div>
-                        <div class="item item-icon">
-                            <img class="bet-item animate__animated" data-index="1" id="orca" src="${gameSetting.imageSrc.ORCA}" alt="orca">
+                        <div class="item item-icon animate__animated" data-index="1">
+                            <img class="bet-item animate__animated"  id="orca" src="${gameSetting.imageSrc.ORCA}" alt="orca">
                         </div>
                         <div class="item item-bet" id="orca-bet-amount">
                             
@@ -141,8 +151,8 @@ let view = {
                         <div class="item item-detail">
                             ${itemWinTimes.LION} times
                         </div>
-                        <div class="item item-icon">
-                            <img class="bet-item animate__animated" data-index="2" id="lion" src="${gameSetting.imageSrc.LION}" alt="lion">
+                        <div class="item item-icon animate__animated" data-index="2">
+                            <img class="bet-item animate__animated"  id="lion" src="${gameSetting.imageSrc.LION}" alt="lion">
                         </div>
                         <div class="item item-bet" id="lion-bet-amount">
                             
@@ -152,8 +162,8 @@ let view = {
                         <div class="item item-detail">
                             ${itemWinTimes.JAGUAR} times
                         </div>
-                        <div class="item item-icon">
-                            <img class="bet-item animate__animated" data-index="3" id="jaguar" src="${gameSetting.imageSrc.JAGUAR}" alt="jaguar">
+                        <div class="item item-icon animate__animated" data-index="3">
+                            <img class="bet-item animate__animated"  id="jaguar" src="${gameSetting.imageSrc.JAGUAR}" alt="jaguar">
                         </div>
                         <div class="item item-bet" id="jaguar-bet-amount">
                             
@@ -427,6 +437,8 @@ window.onload = async function() {
     })
 
     $('.bet-item').on('click', (e) => { 
+        e.preventDefault();
+        e.stopPropagation()
         if (model.gameState !== gameSetting.gameState.BETTING) {
             return;
         }
@@ -511,16 +523,17 @@ window.onload = async function() {
         }
         
         // animate pulse animation
-        $('.bet-item').removeClass('animate__pulse');
-        let $item = $(`img[data-index='${displayTime % 8}']`);
+        $('.item-icon').removeClass('animate__pulse');
+        let $item = $(`div[data-index='${displayTime % 8}']`);
         $item.addClass('animate__pulse');
+
         // if displayTime  is 0 or gamestate is drawing start another interval
         if (displayTime <= 1 || model.gameState === gameSetting.gameState.DRAWING) {
             control.displayNoti('Drawing please wait ...');
             control.displayTime(0);
-            $('.bet-item').removeClass('animate__pulse');
+            let $itemIconEle = $('.item-icon').removeClass('animate__pulse');
             model.setSpinCountDown(gameSetting.spinCountDown);
-            spinInterval = setInterval(spinFunction, 200);
+            spinInterval = setInterval(spinFunction, 100);
             clearInterval(itemSelectionInterval);
         }
     };
@@ -529,8 +542,16 @@ window.onload = async function() {
     
     var startResultingTimeout = function() {
         view.updateMoneyView();
-        control.displayResult(`<img id="result-icon" class="bet-item" src="${gameSetting.imageSrc[model.lastResult]}" alt="orca"> <p>You win this round: <img src="${gameSetting.imageSrc.GOLD_BAR}" /> ${model.lastWinAmount}</p> <p>You bet this round: <img src="${gameSetting.imageSrc.GOLD_COIN}" /> ${model.lastBetAmount}<p/>`)
-        // control.displayNoti('Result: '+ `<img id="result-icon" src="${gameSetting.imageSrc[model.lastResult]}" alt="orca">` + '. You win this round: ' + model.lastWinAmount + '. You bet this round: ' + model.lastBetAmount);
+        // highlight win result
+        let index = gameSetting.itemDataIndex[model.lastResult];
+        
+        // let $item = $(`div[data-index="${gameSetting.itemDataIndex[model.lastResult]}"]`).removeClass('dim-item');
+        let $item = $(`div[data-index='${gameSetting.itemDataIndex[model.lastResult]}']`).removeClass('dim-item');
+        $item.addClass('red-item');
+        //display result
+        control.displayResult(`<img src="${gameSetting.imageSrc[model.lastResult]}" class="result-main-image" /><img id="result-icon" class="bet-item" src="${gameSetting.imageSrc[model.lastResult]}" alt="orca"> <p>You win this round: <img src="${gameSetting.imageSrc.GOLD_BAR}" /> ${model.lastWinAmount}</p> <p>You bet this round: <img src="${gameSetting.imageSrc.GOLD_COIN}" /> ${model.lastBetAmount}<p/>`);
+
+
         setTimeout(startBettingInterval, 5000);
         control.displayLast8Results();
     }
@@ -538,7 +559,10 @@ window.onload = async function() {
     var startBettingInterval = function() {
         control.displayNoti('');
         control.hideResult();
+        $item = $('.item-icon').removeClass('dim-item red-item');
+
         control.setGameState(gameSetting.gameState.BETTING);
+        
         // reset bet
         control.resetBet();
         
@@ -549,20 +573,22 @@ window.onload = async function() {
     var spinFunction = function() {
         let displayTime = Math.trunc(control.getTimeRemaining() / 1000);
         let timeCount = Math.trunc(model.spinCountDown); 
-        $('.bet-item').removeClass('animate__flash');
+       
         let index = Math.abs(timeCount % 8);
-        let $item = $(`img[data-index='${index}']`).addClass('animate__flash');
 
-        if (displayTime < 35 && model.gameState === gameSetting.gameState.RESULTING) {
+        // spin animation
+        $('.item-icon').addClass('dim-item');
+        $(`div[data-index='${index}']`).removeClass('dim-item');
+
+        if (displayTime <= 35 && model.gameState === gameSetting.gameState.RESULTING) {
+            $('.item-icon').addClass('dim-item');
             // startBettingInterval();
             startResultingTimeout();
-            $('.bet-item').removeClass('animate__flash');
             clearInterval(spinInterval);
-            model.timeCountDown(200);
             return;
         }
-        let remainingTime = model.spinCountDown - 1;
-        model.setSpinCountDown(remainingTime);
+        let remainingSpinCount = model.spinCountDown - 1;
+        model.setSpinCountDown(remainingSpinCount);
     }
 
 

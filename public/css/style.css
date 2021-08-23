@@ -3,10 +3,13 @@ red: rgba(216,33,11,1)
 */
 
 @import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
+body {
+    touch-action: pan-y;
+}
 .body {
     font-family: 'Nunito', sans-serif;
     background-color: rgba(255,220,115, .8);
-    padding-top: 1em;
+    padding-top: 5em;
     padding-bottom: 1em;
 }
 
@@ -47,8 +50,6 @@ red: rgba(216,33,11,1)
     filter: drop-shadow(0 0 20px #969696);
 }
 
-
-
 .container .item-container .bet-item img {
     font-size: 100px;
 }
@@ -77,18 +78,32 @@ red: rgba(216,33,11,1)
     border-radius: 50%;
 }
 
-.item-icon  .pulse {
-    background-color: rgb(216,33,11);
+.animate__pulse {
+    background-color: red !important;
 }
+
+.bright-item {
+    filter: brightness(50%);
+    background-color: red !important;
+}
+.dim-item {
+    filter:brightness(50%);
+}
+
 
 .game-board .bet-item {
     margin: 0 !important;
 }
 
 #secondary .bet-container {
+    margin: 2em;
     display: flex;
     flex-direction: row;
     justify-content: center;
+}
+
+.game-board .red-item {
+    background-color: red;
 }
 /*cash*/
 .money-view {
@@ -130,9 +145,6 @@ red: rgba(216,33,11,1)
 #secondary .bet-container .bet-amount:hover {
     box-shadow: -3px 2px #888888;
 }
-
-
-
 
 #secondary .bet-container .bet-picked {
     background: rgb(249,142,146);
@@ -180,14 +192,23 @@ red: rgba(216,33,11,1)
 } */
 
 /*result view*/
+
+#last-result-view .result-main-image {
+    position: fixed;
+    top: 59%;
+    left: 40%;
+    z-index: 3;
+    filter: drop-shadow(0 0 20px #f1f1f1);
+}
+
 #last-result-view {
-    position: absolute; 
-    top: 0; 
+    position: fixed; 
+    top: 65%; 
     background-color: rgb(0, 0, 0);
     background-color: rgba(0, 0, 0, 0.5); /* Black see-through */
     color: #f3f3f3; 
     width: 100%;
-    height: 100%;
+    height: 35%;
     transition: .5s ease;
     opacity: 1;
     color: white;
@@ -204,11 +225,9 @@ red: rgba(216,33,11,1)
     width: 15em;
     margin: auto;
     font-size: 1.5em;
+    border: .2em dashed rgb(255,207,64);
 }
 
-#result-noti .bet-item {
-    filter: drop-shadow(0 0 40px #f1f1f1);
-}
 
 
 #result-noti .win-amount {
