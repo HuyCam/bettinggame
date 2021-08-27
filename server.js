@@ -9,6 +9,7 @@ const auth = require('./middlewares/auth');
 const { betManager } = require('./game-util/betManager'); 
 const cors = require('cors');
 const User = require('./models/user');
+const { rankingManager } = require('./game-util/rankingManager');
 
 const socketio = require('socket.io');
 const http = require('http');
@@ -35,13 +36,13 @@ const timeInterval = (saladGame.restTimer + saladGame.drawTimer);
 Salad Game Process interval set up
 */
 if (process.env.NODE_ENV !== 'test') {
-  setInterval(function() {
+  setInterval(async function() {
     io.emit('drawing');
     console.log("Lucky Draw starting-------------------------------");
     let result = saladGame.draw();
     console.log("result " + result);
     // process winners 
-    betManager.processBetResult(result);
+    await betManager.processBetResult(result);
     // emit update to client
     io.emit('update');
     console.log('Last 8 result ' + saladGame.last8Results.toString());
@@ -102,7 +103,6 @@ app.post('/bet', auth, async (req, res) => {
 })
 
 io.on('connection', (socket) => {
-  console.log('connection established ' + new Date(saladGame.nextDrawTime).toISOString());
   socket.emit('gamesetting', {
     nextDrawTime: new Date(saladGame.nextDrawTime).toISOString(),
     last8Results: saladGame.last8Results
@@ -119,7 +119,8 @@ io.on('connection', (socket) => {
     callback(null, 'got result', {
       nextDrawTime: new Date(saladGame.nextDrawTime).toISOString(),
       result: saladGame.lastResult,
-      last8Results: saladGame.last8Results 
+      last8Results: saladGame.last8Results,
+      bigWinnerQueue: rankingManager.bigWinnerQueue
     });
   })
 
@@ -158,7 +159,7 @@ io.on('connection', (socket) => {
   })
 
   socket.on('join', (data) => {
-    console.log(data);
+    
   })
 })
 

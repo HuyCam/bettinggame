@@ -208,6 +208,9 @@ let view = {
     },
     displayNotiText: function(text) {
         $('#noti-text').html(text);
+    },
+    displayWinnerBoard: function(html) {
+        $('#winner-board').html(html);
     }
 }
 
@@ -218,6 +221,7 @@ let model = {
     lastResult:'',
     lastWinAmount: '',
     lastBetAmount: '',
+    bigWinnerQueue:[],
     last8Results: [],
     notiText:'',
     betamount: 0,
@@ -296,6 +300,9 @@ let model = {
     },
     setResult: function(result) {
         this.lastResult = result;
+    },
+    setBigWinnerQueue: function(queue) {
+        this.bigWinnerQueue = queue;
     }
 }
 
@@ -322,7 +329,6 @@ let control = {
             });
     
             const body = await response.json();
-            console.log(body);
             model.user = body.user;
             model.id = body.user._id;
         }
@@ -406,12 +412,24 @@ let control = {
     displayLast8Results: function() {
         view.displayLast8Results(model.last8Results);
     },
+    displayWinnerBoard: function() {
+        let html = '';
+        model.bigWinnerQueue.forEach(winner => {
+            if (winner.name) {
+                html += `<div>${winner.name}</br><img src="${gameSetting.imageSrc.GOLD_BAR}"/> ${winner.winAmount}</div>`
+            }
+        })
+        view.displayWinnerBoard(html);
+    },
     setBettingInterval: function() {
         control.displayNoti('');
         control.setGameState(gameSetting.gameState.BETTING);
         $('.bet-item').removeClass('animate__flash');
         clearInterval(spinInterval);
         itemSelectionInterval = setInterval(timeCountFunction, 1000);
+    },
+    setBigWinnerQueue: function(winnerQueue) {
+        model.setBigWinnerQueue(winnerQueue);
     }
 }
 
@@ -433,7 +451,6 @@ window.onload = async function() {
         model.betamount  =parseInt(value);
         $('.bet-amount').removeClass('bet-picked');
         $(this).addClass('bet-picked');
-        console.log('model ', model.betamount);
     })
 
     $('.bet-item').on('click', (e) => { 
@@ -459,13 +476,10 @@ window.onload = async function() {
                 } else {
                     // update bet on model
                     const result = model.updateBetAmount(betItem, betAmount);
-                    console.log('bet info');
-                    console.log(body);
                     // deduct money
                     control.calculateMoney(0 - body.bet.value);
                     
                     $(betElementId).text(result);
-                    console.log(success);
                 }
             })
     })
@@ -484,9 +498,11 @@ window.onload = async function() {
                 // display 8 results
                 control.setLast8Results(body.last8Results);
 
+                // handle big winner queue
+                control.setBigWinnerQueue(body.bigWinnerQueue);
+
                 //set game state
                 model.setGameState(gameSetting.gameState.RESULTING);
-                
                 console.log('next draw time ' + control.processNextDrawTime(body.nextDrawTime));
             }
         })
@@ -507,11 +523,6 @@ window.onload = async function() {
         control.displayLast8Results();
         callback(null, 'succesfully set up gamesetting');
     })
-
-    //
-    let resultTimeout = null;
-
-
 
     // update time and part of board view every second
     var spinInterval = null;
@@ -549,8 +560,8 @@ window.onload = async function() {
         let $item = $(`div[data-index='${gameSetting.itemDataIndex[model.lastResult]}']`).removeClass('dim-item');
         $item.addClass('red-item');
         //display result
-        control.displayResult(`<img src="${gameSetting.imageSrc[model.lastResult]}" class="result-main-image" /><img id="result-icon" class="bet-item" src="${gameSetting.imageSrc[model.lastResult]}" alt="orca"> <p>You win this round: <img src="${gameSetting.imageSrc.GOLD_BAR}" /> ${model.lastWinAmount}</p> <p>You bet this round: <img src="${gameSetting.imageSrc.GOLD_COIN}" /> ${model.lastBetAmount}<p/>`);
-
+        control.displayResult(`<img src="${gameSetting.imageSrc[model.lastResult]}" class="result-main-image" /> <p>You win this round: <img src="${gameSetting.imageSrc.GOLD_BAR}" /> ${model.lastWinAmount}</p> <p>You bet this round: <img src="${gameSetting.imageSrc.GOLD_COIN}" /> ${model.lastBetAmount}<p/>`);
+        control.displayWinnerBoard();
 
         setTimeout(startBettingInterval, 5000);
         control.displayLast8Results();

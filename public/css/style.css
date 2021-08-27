@@ -222,10 +222,9 @@ body {
 }
 
 #last-result-view #result-noti {
-    width: 15em;
+    width: 25em;
     margin: auto;
-    font-size: 1.5em;
-    border: .2em dashed rgb(255,207,64);
+    font-size: 2em;
 }
 
 
@@ -237,4 +236,15 @@ body {
 .hiden {
     z-index: -1 !important;
     opacity: 0 !important;
+}
+
+#winner-board {
+    font-size: 2em;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+#last-result-view h3 {
+    color: rgb(255,207,64)
 }

@@ -6,7 +6,8 @@
   "scripts": {
     "test": "NODE_ENV=test jest --watch --runInBand",
     "dev": "NODE_ENV=development nodemon ./app.js",
-    "prod": "NODE_ENV=production node ./app.js"
+    "prod": "NODE_ENV=production node ./app.js",
+    "start": "NODE_ENV=production node ./app.js"
   },
   "jest": {
     "testEnvironment": "node",
