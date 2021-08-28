@@ -13,6 +13,9 @@
     "testEnvironment": "node",
     "testTimeout": 20000
   },
+  "engines": {
+    "node": "14.7.4"
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {
