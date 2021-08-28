@@ -35,6 +35,7 @@ const getRandomInt = (max) => {
     return Math.floor(Math.random() * max);
 }
 
+
 const saladGame = {
     nextDrawTime: 0,
     allowBet: false,
